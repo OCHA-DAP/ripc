@@ -43,10 +43,10 @@
 #'
 #' @export
 ipc_wrangle <- function(df) {
-  df |>
-    ipc_rename() |>
-    ipc_clean_area() |>
-    ipc_pivot() |>
+  df %>%
+    ipc_rename() %>%
+    ipc_clean_area() %>%
+    ipc_pivot() %>%
     ipc_clean_columns()
 }
 
@@ -59,10 +59,10 @@ ipc_wrangle <- function(df) {
 #' @noRd
 ipc_rename <- function(df) {
   # get names from rows 3 to 5
-  df_names <- as.data.frame(t(df[3:5,])) |>
+  df_names <- as.data.frame(t(df[3:5,])) %>%
     tidyr::fill(
       tidyr::everything()
-    ) |>
+    ) %>%
     tidyr::unite(
       col = "names",
       sep = "_",
@@ -70,8 +70,8 @@ ipc_rename <- function(df) {
     )
 
   # apply these names and clean other names
-  names(df) <- df_names$names |>
-    tolower() |>
+  names(df) <- df_names$names %>%
+    tolower() %>%
     stringr::str_replace_all(
       c(
         " " = "_",
@@ -101,16 +101,16 @@ ipc_rename <- function(df) {
 #'
 #' @noRd
 ipc_clean_area <- function(df) {
-  df |>
+  df %>%
     dplyr::slice(
       -c(1:5)
-    ) |>
+    ) %>%
     dplyr::mutate(
       "country_group" := cumsum(is.na(dplyr::lag(.data$country)) | is.na(.data$country))
-    ) |>
+    ) %>%
     dplyr::group_by(
       .data[["country_group"]]
-    ) |>
+    ) %>%
     dplyr::mutate(
       "mutate_group_temp_" := any(is.na(.data$country)) | !all(is.na(.data$area)) | dplyr::n() == 1,
       "area" := dplyr::case_when(
@@ -123,7 +123,7 @@ ipc_clean_area <- function(df) {
         dplyr::row_number() > 1 ~ stringr::str_extract(.data$country[1], ".*(?=:)"),
         TRUE ~ .data$country
       )
-    ) |>
+    ) %>%
     dplyr::ungroup()
 }
 
@@ -134,15 +134,15 @@ ipc_clean_area <- function(df) {
 #'
 #' @noRd
 ipc_pivot <- function(df) {
-  df |>
+  df %>%
     dplyr::filter(
       !is.na(.data$area)
-    ) |>
+    ) %>%
     tidyr::pivot_longer(
       cols = tidyr::matches("^current|^first|^second"),
       names_to = c("analysis_type", "name"),
       names_pattern = "(^current|^first_projection|^second_projection)_(.*)"
-    ) |>
+    ) %>%
     tidyr::pivot_wider()
 
 }
@@ -155,22 +155,22 @@ ipc_pivot <- function(df) {
 #'
 #' @noRd
 ipc_clean_columns <- function(df) {
-  df |>
+  df %>%
     dplyr::select(
       -c(
         "country_population",
         "population_analysed_pct_of_total_county_pop"
       )
-    ) |>
+    ) %>%
     dplyr::filter(
       !is.na(.data$phase_1_num)
-    ) |>
+    ) %>%
     dplyr::rename(
       "population" := "population_analysed_num",
       "phase" := "population_analysed_area_phase",
       "analysis_period" := "population_analysed_analysis_period"
-    ) |>
-    readr::type_convert() |>
+    ) %>%
+    readr::type_convert() %>%
     dplyr::mutate(
       "analysis_period_start" := lubridate::floor_date(
         lubridate::dmy(

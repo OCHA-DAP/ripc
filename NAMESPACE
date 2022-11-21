@@ -2,5 +2,6 @@
 
 export(ipc_download)
 export(ipc_wrangle)
+importFrom(magrittr,"%>%")
 importFrom(rlang,":=")
 importFrom(rlang,.data)

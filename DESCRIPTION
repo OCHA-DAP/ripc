@@ -1,10 +1,15 @@
 Package: Ripc
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Download and Process IPC Data
+Version: 0.0.1
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person(
+      given = "Seth",
+      family = "Caldwell", 
+      email = "caldwellst@gmail.com",
+      role = c("aut", "cre")
+    )
+Description: Download and wrangling functionality for IPC data stored
+    on the Humanitarian Data Exchange.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -14,6 +19,7 @@ Remotes:
 Imports: 
     dplyr,
     lubridate,
+    magrittr,
     readr,
     rhdx,
     rlang,
