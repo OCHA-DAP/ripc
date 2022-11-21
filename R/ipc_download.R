@@ -15,7 +15,7 @@ ipc_download <- function(wrangle = TRUE, configuration = NULL) {
   res <- rhdx::pull_dataset(
     identifier = "ipc-country-data",
     configuration = configuration
-  ) |>
+  ) %>%
     rhdx::get_resource(index = 1)
 
   df <- suppressMessages(
