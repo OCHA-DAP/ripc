@@ -12,12 +12,15 @@
 #'
 #' @export
 ipc_download <- function(wrangle = TRUE, configuration = NULL) {
-  df <- rhdx::pull_dataset(
+  res <- rhdx::pull_dataset(
     identifier = "ipc-country-data",
     configuration = configuration
   ) |>
-    rhdx::get_resource(index = 1) |>
-    rhdx::read_resource(sheet = "IPC")
+    rhdx::get_resource(index = 1)
+
+  df <- suppressMessages(
+    rhdx::read_resource(resource = res, sheet = "IPC")
+  )
 
   if (wrangle) {
     df <- ipc_wrangle(df)

@@ -16,39 +16,43 @@ knitr::opts_chunk$set(
 # Ripc
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/OCHA-DAP/Ripc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/OCHA-DAP/Ripc/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of Ripc is to ...
+The goal of Ripc is to provide access to [Integrated Food Security Phase
+Classification](https://www.ipcinfo.org) (IPC) data. 
 
 ## Installation
 
-You can install the development version of Ripc like so:
+You can install the Ripc like so:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+# install.packages("remotes")
+remotes::install_github("OCHA-DAP/Ripc")
 ```
 
-## Example
+The package is not currently available on CRAN.
 
-This is a basic example which shows you how to solve a common problem:
+## Usage
 
-```{r example}
+IPC data is stored on the [Humanitarian Data Exchange](https://data.humdata.org/dataset/ipc-country-data), and this package
+provides a simple interface to pull this data directly. However, the data is
+also stored in a format not readily usable for analysis or visualization. Thus,
+this package also automatically wrangles the data into a format prepared for
+analysis. This functionality is documented within `ipc_download()` and
+`ipc_wrangle()` respectively.
+
+For the user, all that is needed is a simple one liner.
+
+```{r download, message = FALSE}
 library(Ripc)
-## basic example code
+
+ipc_download()
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+## Help and issues
 
-```{r cars}
-summary(cars)
-```
+For any help, please file an issue on
+[Github](https://github.com/OCHA-DAP/Ripc/issues). If the issue relates to
+downloading the data from HDX, please refer to the [rhdx package](https://github.com/dickoa/rhdx).
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
