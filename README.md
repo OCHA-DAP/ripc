@@ -56,8 +56,8 @@ ipc_download()
 #> #   analysis_period_end <date>, phase_1_num <dbl>, phase_1_pct <dbl>,
 #> #   phase_2_num <dbl>, phase_2_pct <dbl>, phase_3_num <dbl>, phase_3_pct <dbl>,
 #> #   phase_4_num <dbl>, phase_4_pct <dbl>, phase_5_num <dbl>, phase_5_pct <dbl>,
-#> #   `phase_p3+_num` <dbl>, `phase_p3+_pct` <dbl>, and abbreviated variable
-#> #   names ¹​level_1_name, ²​analysis_name, ³​date_of_analysis, ⁴​country_group, …
+#> #   phase_3pl_num <dbl>, phase_3pl_pct <dbl>, and abbreviated variable names
+#> #   ¹​level_1_name, ²​analysis_name, ³​date_of_analysis, ⁴​country_group, …
 ```
 
 ## Help and issues

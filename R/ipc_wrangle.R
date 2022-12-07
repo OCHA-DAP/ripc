@@ -125,6 +125,9 @@ ipc_clean_area <- function(df) {
         TRUE ~ .data$country
       )
     ) %>%
+    dplyr::select(
+      -mutate_group_temp_
+    ) %>%
     dplyr::ungroup()
 }
 
