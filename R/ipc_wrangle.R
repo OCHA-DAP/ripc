@@ -76,7 +76,8 @@ ipc_rename <- function(df) {
       c(
         " " = "_",
         "#" = "num",
-        "%" = "pct"
+        "%" = "pct",
+        "p3\\+" = "3pl"
       )
     )
 
