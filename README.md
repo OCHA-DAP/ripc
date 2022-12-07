@@ -38,19 +38,19 @@ For the user, all that is needed is a simple one liner.
 library(Ripc)
 
 ipc_download()
-#> # A tibble: 15,597 × 26
-#>    country level…¹ area  area_id analy…² date_…³ count…⁴ mutat…⁵ analy…⁶ popul…⁷
-#>    <chr>   <chr>   <chr>   <dbl> <chr>   <chr>     <int> <lgl>   <chr>     <dbl>
-#>  1 Afghan… <NA>    Bada…  2.51e7 Acute … Mar 20…       1 TRUE    current 1401209
-#>  2 Afghan… <NA>    Bada…  2.51e7 Acute … Mar 20…       1 TRUE    first_… 1401209
-#>  3 Afghan… <NA>    Badg…  2.51e7 Acute … Mar 20…       1 TRUE    current  730566
-#>  4 Afghan… <NA>    Badg…  2.51e7 Acute … Mar 20…       1 TRUE    first_…  730566
-#>  5 Afghan… <NA>    Bagh…  2.51e7 Acute … Mar 20…       1 TRUE    current 1077131
-#>  6 Afghan… <NA>    Bagh…  2.51e7 Acute … Mar 20…       1 TRUE    first_… 1077131
-#>  7 Afghan… <NA>    Bagh…  2.51e7 Acute … Mar 20…       1 TRUE    current  271631
-#>  8 Afghan… <NA>    Bagh…  2.51e7 Acute … Mar 20…       1 TRUE    first_…  271631
-#>  9 Afghan… <NA>    Balkh  2.51e7 Acute … Mar 20…       1 TRUE    current 1356012
-#> 10 Afghan… <NA>    Balkh  2.51e7 Acute … Mar 20…       1 TRUE    first_… 1356012
+#> # A tibble: 15,597 × 25
+#>    country     level_…¹ area  area_id analy…² date_of_…³ count…⁴ analy…⁵ popul…⁶
+#>    <chr>       <chr>    <chr>   <dbl> <chr>   <date>       <int> <chr>     <dbl>
+#>  1 Afghanistan <NA>     Bada…  2.51e7 Acute … 2022-03-01       1 current 1401209
+#>  2 Afghanistan <NA>     Bada…  2.51e7 Acute … 2022-03-01       1 first_… 1401209
+#>  3 Afghanistan <NA>     Badg…  2.51e7 Acute … 2022-03-01       1 current  730566
+#>  4 Afghanistan <NA>     Badg…  2.51e7 Acute … 2022-03-01       1 first_…  730566
+#>  5 Afghanistan <NA>     Bagh…  2.51e7 Acute … 2022-03-01       1 current 1077131
+#>  6 Afghanistan <NA>     Bagh…  2.51e7 Acute … 2022-03-01       1 first_… 1077131
+#>  7 Afghanistan <NA>     Bagh…  2.51e7 Acute … 2022-03-01       1 current  271631
+#>  8 Afghanistan <NA>     Bagh…  2.51e7 Acute … 2022-03-01       1 first_…  271631
+#>  9 Afghanistan <NA>     Balkh  2.51e7 Acute … 2022-03-01       1 current 1356012
+#> 10 Afghanistan <NA>     Balkh  2.51e7 Acute … 2022-03-01       1 first_… 1356012
 #> # … with 15,587 more rows, 16 more variables: phase <dbl>,
 #> #   analysis_period <chr>, analysis_period_start <date>,
 #> #   analysis_period_end <date>, phase_1_num <dbl>, phase_1_pct <dbl>,

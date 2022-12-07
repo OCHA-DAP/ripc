@@ -176,6 +176,15 @@ ipc_clean_columns <- function(df) {
     ) %>%
     readr::type_convert() %>%
     dplyr::mutate(
+      "date_of_analysis" := as.Date(
+        paste(
+          .data$date_of_analysis,
+          1
+        ),
+        format = "%b %Y %d"
+      )
+    ) %>%
+    dplyr::mutate(
       "analysis_period_start" := lubridate::floor_date(
         lubridate::dmy(
           x = paste(
