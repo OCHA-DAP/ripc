@@ -115,18 +115,18 @@ ipc_clean_area <- function(df) {
     dplyr::mutate(
       "mutate_group_temp_" := any(is.na(.data$country)) | !all(is.na(.data$area)) | dplyr::n() == 1,
       "area" := dplyr::case_when(
-        mutate_group_temp_ ~ .data$area,
+        .data$mutate_group_temp_ ~ .data$area,
         dplyr::row_number() == 1 ~ NA_character_,
         TRUE ~ .data$country
       ),
       "country" := dplyr::case_when(
-        mutate_group_temp_ ~ .data$country,
+        .data$mutate_group_temp_ ~ .data$country,
         dplyr::row_number() > 1 ~ stringr::str_extract(.data$country[1], ".*(?=:)"),
         TRUE ~ .data$country
       )
     ) %>%
     dplyr::select(
-      -mutate_group_temp_
+      -"mutate_group_temp_"
     ) %>%
     dplyr::ungroup()
 }

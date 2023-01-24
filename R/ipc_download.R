@@ -1,6 +1,6 @@
-#' Download IPC data
+#' Download point IPC data from the API
 #'
-#' `ipc_download()` downloads IPC country data from the [Humanitarian
+#' `ipc_get()` downloads IPC country data from the [Humanitarian
 #' Data Exchange](https://data.humdata.org/dataset/ipc-country-data).
 #'
 #' @param wrangle If `True` (the default), wrangles the data into a coherent

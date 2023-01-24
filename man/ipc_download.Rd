@@ -2,7 +2,7 @@
 % Please edit documentation in R/ipc_download.R
 \name{ipc_download}
 \alias{ipc_download}
-\title{Download IPC data}
+\title{Download point IPC data from the API}
 \usage{
 ipc_download(wrangle = TRUE, configuration = NULL)
 }
@@ -17,5 +17,5 @@ data structure. Details on the wrangling in the documentation of
 IPC data frame.
 }
 \description{
-\code{ipc_download()} downloads IPC country data from the \href{https://data.humdata.org/dataset/ipc-country-data}{Humanitarian Data Exchange}.
+\code{ipc_get()} downloads IPC country data from the \href{https://data.humdata.org/dataset/ipc-country-data}{Humanitarian Data Exchange}.
 }
