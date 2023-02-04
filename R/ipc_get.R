@@ -3,21 +3,22 @@
 #' Back-end function used to drive the API calls of the other `ipc_get_...()`
 #' family of functions.
 #'
-#' @param resource One of the public resources exposed in the IPC API,
-#'     `"areas"` (the default), `"analyses"`, `"points"`, and `"country"`.
+#' @param resource One of the resources exposed in the IPC API, such
+#'     `"areas"` , `"analyses"`, `"points"`, or `"country"`.
 #' @param api_key IPC API key. If `NULL` (the default), looks for `IPC_API_KEY`
 #'     in the environment.
 #' @param ... Named parameters passed to the API call URL in the form of
 #'     `argument=value`.
+#' @param drop_metadata Logical, whether or not to drop metadata from the
+#'     original list return.
 #'
 #' @return Data frame from the API
 ipc_get <- function(
-    resource = c("areas", "analyses", "points", "country"),
+    resource,
     api_key = NULL,
-    ...
+    ...,
+    drop_metadata = FALSE
   ) {
-    # check argument validity (still check resources in case function is public)
-    resource <- rlang::arg_match(resource)
     api_key <- get_api_key(api_key)
 
     # get parameters from ellipsis, removing nulls for string concatenation
@@ -47,9 +48,23 @@ ipc_get <- function(
       type = "application/json"
     )
 
+    # check if list of lists or if not, convert to a list of single list
+    if (!all(sapply(ipc_list, inherits, what = "list"))) {
+      ipc_list <- list(ipc_list)
+    }
+
+    if (purrr::is_empty(ipc_list)) {
+      stop(
+        "API call was successful but no content was returned. Check that the ",
+        "ID or other parameters passed are actually present in the resource.",
+        call. = FALSE
+      )
+    }
+
     purrr::map_dfr(
       .x = ipc_list,
-      .f = ~ null_converter(.x) %>% dplyr::as_tibble()
+      .f = ~ null_converter(.x, drop_metadata = drop_metadata)
+        %>% dplyr::as_tibble()
     )
 }
 
@@ -75,10 +90,14 @@ get_api_key <- function(api_key) {
 #' Convert NULL values in list to NA
 #'
 #' Used since NULL values generate errors when converting to data frame.
+#' Drops metadata from lists if requested, used in [ipc_get_population()].
 #'
 #' @noRd
-null_converter <- function(x, na = TRUE) {
+null_converter <- function(x, drop_metadata = FALSE) {
   if (is.list(x)) {
+    if (drop_metadata) {
+      x[["metadata"]] <- NULL
+    }
     lapply(x, null_converter)
   }
   else {

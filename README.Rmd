@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/OCHA-DAP/Ripc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/OCHA-DAP/Ripc/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The goal of Ripc is to provide access to [Integrated Food Security Phase
@@ -35,6 +36,32 @@ The package is not currently available on CRAN.
 
 ## Usage
 
+Ripc provides functionality to access IPC data stored directly on the [IPC
+API](https://docs.api.ipcinfo.org). There are a wide set of functions detailed
+further below, but most users will get the information they need from the
+`ipc_get_population()` function which returns datasets of country-level,
+group-level, and area-level analyses in a list.
+
+```{r download, message = FALSE}
+library(Ripc)
+
+df_list <- ipc_get_population()
+df_list$country
+```
+
+## IPC API
+
+```{r child="vignettes/ipc-api.Rmd"}
+```
+
+## Humanitarian Data Exchange data
+
+`r lifecycle::badge("deprecated")`
+
+Usage of functions to access data from the Humanitarian Data Exchange are
+deprecated. These will be removed in future versions once the API access is
+stable.
+
 IPC data is stored on the [Humanitarian Data Exchange](https://data.humdata.org/dataset/ipc-country-data), and this package
 provides a simple interface to pull this data directly. However, the data is
 also stored in a format not readily usable for analysis or visualization. Thus,
@@ -44,9 +71,7 @@ analysis. This functionality is documented within `ipc_download()` and
 
 For the user, all that is needed is a simple one liner.
 
-```{r download, message = FALSE}
-library(Ripc)
-
+```{r hdx-download, message = FALSE}
 ipc_download()
 ```
 

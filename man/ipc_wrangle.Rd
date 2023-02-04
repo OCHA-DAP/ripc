@@ -13,12 +13,15 @@ ipc_wrangle(df)
 Wrangled IPC data.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+\code{ipc_wrangled()} has been deprecated in favor of the \code{ipc_get_...()}
+family of functions which download from the IPC API, instead of HDX.
 \code{ipc_wrangle()} transforms the IPC data \href{https://data.humdata.org/dataset/ipc-country-data}{stored on HDX}. The outcome is a
 tidy dataset where each row corresponds to an analytical output (e.g. first
 projection for a specific date) and geographical area. Performed by default
 in \code{\link[=ipc_download]{ipc_download()}}.
-}
-\details{
+
 There are a variety of transformations done in \code{ipc_wrangle()}.
 \subsection{Renaming}{
 

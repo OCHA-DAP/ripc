@@ -2,9 +2,16 @@
 % Please edit documentation in R/ipc_get_areas.R
 \name{ipc_get_areas}
 \alias{ipc_get_areas}
-\title{Get areas resource from IPC API}
+\title{Get areas resources from the IPC API}
 \usage{
-ipc_get_areas(country = NULL, year = NULL, type = NULL, api_key = NULL)
+ipc_get_areas(
+  country = NULL,
+  year = NULL,
+  type = NULL,
+  id = NULL,
+  period = NULL,
+  api_key = NULL
+)
 }
 \arguments{
 \item{country}{ISO2 country code.}
@@ -17,9 +24,43 @@ data for all years.}
 conditions, either acute or chronic. If \code{NULL}, the default, returns
 data for all types.}
 
+\item{id}{Analysis ID.}
+
+\item{period}{Period code, either 'C', 'P', or 'A' for current, projection,
+and second projection.}
+
 \item{api_key}{IPC API key. If \code{NULL} (the default), looks for \code{IPC_API_KEY}
 in the environment.}
 }
+\value{
+A data frame.
+}
 \description{
-Accesses the areas resource on the IPC API. More details to come.
+Accesses the areas resources on the IPC API. Contains detailed area and
+population data. If \code{country}, \code{year} and/or \code{type} parameters are passed,
+accesses the \strong{areas} public API endpoint and pulls in all areas filtered to
+those parameters. To get all areas for a specific analysis
+and period, available on the \strong{areas/{id}/{period}} developer API endpoint,
+pass in \code{id} and \code{period}. You cannot pass in both sets of parameters.
+}
+\details{
+Areas data is the typical unit of analysis in IPC outputs. These are
+typically administrative units (or clusters of them together). For each area,
+estimates of the population in each phase is provided and a general phase
+classification is assigned. Data is currently output only for current
+periods through \strong{areas} endpoint. Use \code{\link[=ipc_get_population]{ipc_get_population()}} to get
+detailed population data and classifications for all analysis periods.
+
+See the \href{https://www.ipcinfo.org}{IPC website} and
+\href{https://docs.api.ipcinfo.org}{API documentation} for more information.
+}
+\examples{
+\dontrun{
+# get all areas from the public API
+ipc_get_areas()
+
+# get areas for specific analysis ID and period from developer API
+ipc_get_areas(id = 12856213, period = "P")
+}
+
 }

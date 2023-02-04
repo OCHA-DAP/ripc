@@ -17,5 +17,9 @@ data structure. Details on the wrangling in the documentation of
 IPC data frame.
 }
 \description{
-\code{ipc_get()} downloads IPC country data from the \href{https://data.humdata.org/dataset/ipc-country-data}{Humanitarian Data Exchange}.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+\code{ipc_download()} has been deprecated in favor of the \code{ipc_get_...()} family
+of functions which download from the IPC API, rather than HDX.
+\code{ipc_download()} downloads IPC country data from the \href{https://data.humdata.org/dataset/ipc-country-data}{Humanitarian Data Exchange}.
 }

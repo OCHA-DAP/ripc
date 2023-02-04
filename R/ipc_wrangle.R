@@ -1,5 +1,10 @@
 #' Wrangle IPC data
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#'
+#' `ipc_wrangled()` has been deprecated in favor of the `ipc_get_...()`
+#' family of functions which download from the IPC API, instead of HDX.
 #' `ipc_wrangle()` transforms the IPC data [stored on
 #' HDX](https://data.humdata.org/dataset/ipc-country-data). The outcome is a
 #' tidy dataset where each row corresponds to an analytical output (e.g. first
@@ -43,6 +48,21 @@
 #'
 #' @export
 ipc_wrangle <- function(df) {
+  # only produce deprecation warning if not called from ipc_download()
+  # so as not to duplicate warnings
+  calling_fn <- deparse(sys.calls()[[max(sys.nframe()-1, 1)]])
+  if (!stringr::str_detect(calling_fn, "ipc_download")) {
+    .Deprecated(
+      new = "ipc_get_population()",
+      msg = paste(
+        "`ipc_wrangle()` has been deprecated as the recommended functions for",
+        "downloading IPC data directly pull from the IPC API.",
+        "`ipc_get_population()` most directly replicates the functionality of",
+        "the deprecated `ipc_download()` function."
+      )
+    )
+  }
+
   df %>%
     ipc_rename() %>%
     ipc_clean_area() %>%

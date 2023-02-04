@@ -1,6 +1,6 @@
 Package: Ripc
 Title: Download and Process IPC Data
-Version: 0.0.1
+Version: 0.1.0
 Authors@R: 
     person(
       given = "Seth",
@@ -20,6 +20,7 @@ Imports:
     countrycode,
     dplyr,
     httr,
+    lifecycle,
     lubridate,
     magrittr,
     purrr,
@@ -28,3 +29,7 @@ Imports:
     rlang,
     stringr,
     tidyr
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

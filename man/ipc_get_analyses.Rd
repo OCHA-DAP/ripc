@@ -2,9 +2,15 @@
 % Please edit documentation in R/ipc_get_analyses.R
 \name{ipc_get_analyses}
 \alias{ipc_get_analyses}
-\title{Get analyses resource from IPC API}
+\title{Get analyses resources from the IPC API}
 \usage{
-ipc_get_analyses(country = NULL, year = NULL, type = NULL, api_key = NULL)
+ipc_get_analyses(
+  country = NULL,
+  year = NULL,
+  type = NULL,
+  id = NULL,
+  api_key = NULL
+)
 }
 \arguments{
 \item{country}{ISO2 country code.}
@@ -17,9 +23,34 @@ data for all years.}
 conditions, either acute or chronic. If \code{NULL}, the default, returns
 data for all types.}
 
+\item{id}{Analysis ID.}
+
 \item{api_key}{IPC API key. If \code{NULL} (the default), looks for \code{IPC_API_KEY}
 in the environment.}
 }
+\value{
+A data frame.
+}
 \description{
-Accesses the analyses resource on the IPC API. More details to come.
+Accesses the areas resources on the IPC API. Contains detailed analysis
+information. If \code{country}, \code{year} and/or \code{type} parameters are passed,
+accesses the \strong{analyses} public API endpoint and pulls in all analyses or
+filtered to those parameters. To get the details for a specific analysis
+available on the \strong{anales/{id}/{period}} developer API endpoint,
+pass in \code{id}. You cannot pass in both sets of parameters.
+}
+\details{
+Analyses data is metadata related to specific analyses conducted by the IPC,
+including title of the analysis, link to its release page on the IPC website,
+and creation/modification dates.
+}
+\examples{
+\dontrun{
+# get all analyses details from the public API
+ipc_get_analyses()
+
+# get analysis details for a specific ID
+ipc_get_analyses(id = 12856213)
+}
+
 }
