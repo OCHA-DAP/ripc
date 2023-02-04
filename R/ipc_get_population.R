@@ -89,8 +89,17 @@ point_phases_as_df <- function(phases_list) {
 #'
 #' @noRd
 clean_population_df <- function(df) {
+  # rename for all sub-data frames
+  # only needed to do once
   renamed_df <- rename_population_df(df) %>%
-    dplyr::rename("anl_id" := "id")
+    dplyr::rename("anl_id" := "id") %>%
+    dplyr::rename_with(
+      .cols = dplyr::ends_with("period_dates"),
+      .f = ~ paste0(
+        "period_dates_",
+        stringr::str_remove(.x, "_period_dates")
+      )
+    )
 
   # get the country data frame
   country_df <- renamed_df %>%
@@ -225,13 +234,6 @@ rename_population_df <- function(df) {
           "population",
           "population_percentage"
         )
-      )
-    ) %>%
-    dplyr::rename_with(
-      .cols = dplyr::ends_with("period_dates"),
-      .f = ~ paste0(
-        "period_dates_",
-        stringr::str_remove(.x, "_period_dates")
       )
     ) %>%
     dplyr::rename_with(

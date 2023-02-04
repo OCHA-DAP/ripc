@@ -7,13 +7,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
-
 The Ripc functions provide access to API endpoints detailed in the [IPC
 API](https://docs.api.ipcinfo.org) documentation. The documentation should be
 referred to in order to better understand the API calls themselves (under the

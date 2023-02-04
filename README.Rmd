@@ -49,6 +49,8 @@ df_list <- ipc_get_population()
 df_list$country
 ```
 
+More details on the API are available below.
+
 ## IPC API
 
 ```{r child="vignettes/ipc-api.Rmd"}
@@ -56,7 +58,7 @@ df_list$country
 
 ## Humanitarian Data Exchange data
 
-`r lifecycle::badge("deprecated")`
+[![Lifecycle: deprecated](https://img.shields.io/badge/lifecycle-deprecated-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#deprecated)
 
 Usage of functions to access data from the Humanitarian Data Exchange are
 deprecated. These will be removed in future versions once the API access is
