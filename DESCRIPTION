@@ -1,6 +1,6 @@
 Package: Ripc
 Title: Download and Process IPC Data
-Version: 0.0.1
+Version: 0.1.0
 Authors@R: 
     person(
       given = "Seth",
@@ -13,15 +13,23 @@ Description: Download and wrangling functionality for IPC data stored
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Remotes: 
     dickoa/rhdx
 Imports: 
+    countrycode,
     dplyr,
+    httr,
+    lifecycle,
     lubridate,
     magrittr,
+    purrr,
     readr,
     rhdx,
     rlang,
     stringr,
     tidyr
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
