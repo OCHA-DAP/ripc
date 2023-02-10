@@ -23,6 +23,7 @@ Imports:
     lifecycle,
     lubridate,
     magrittr,
+    memoise,
     purrr,
     readr,
     rhdx,

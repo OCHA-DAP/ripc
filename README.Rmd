@@ -77,6 +77,21 @@ For the user, all that is needed is a simple one liner.
 ipc_download()
 ```
 
+## Memoisation
+
+`ipc_get()`, the function that makes requests to the IPC API, has cached
+functionality based on `memoise::memoise()` so that all of the
+`ipc_get_...()` family of functions are cached in your local memory in a single
+session. This means that once you've made a call to retrieve data from
+the API, running an identical request will use the cached data rather than
+re-request the data from the IPC database.
+
+If you need to ensure that the Ripc package is making new requests to the API
+each time is called, then you will need to run 
+`memoise::forget(Ripc:::ipc_get)` to clear the cache prior to repeating a call.
+See the documentation of the [memoise package](https://github.com/r-lib/memoise)
+for more details.
+
 ## Help and issues
 
 For any help, please file an issue on

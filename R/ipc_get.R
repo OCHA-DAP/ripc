@@ -12,6 +12,7 @@
 #' @param drop_metadata Logical, whether or not to drop metadata from the
 #'     original list return.
 #'
+#' @importFrom httr GET
 #' @return Data frame from the API
 ipc_get <- function(
     resource,
