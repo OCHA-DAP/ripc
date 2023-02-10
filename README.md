@@ -39,18 +39,18 @@ library(Ripc)
 df_list <- ipc_get_population()
 df_list$country
 #> # A tibble: 411 × 23
-#>    anl_id   title      country condi…¹ analy…² view_…³ period perio…⁴ analysis…⁵
-#>    <chr>    <chr>      <chr>   <chr>   <chr>   <chr>   <chr>  <chr>   <date>    
-#>  1 12166797 Acute Foo… AF      A       May 20… area    curre… May 20… 2017-05-01
-#>  2 12166890 Acute Foo… AF      A       Sep 20… area    curre… Aug 20… 2017-08-01
-#>  3 12527589 Acute Foo… AF      A       Jan 20… area    curre… Nov 20… 2017-11-01
-#>  4 12856213 Acute Foo… AF      A       Sep 20… area    curre… Aug 20… 2018-08-01
-#>  5 12856213 Acute Foo… AF      A       Sep 20… area    proje… Nov 20… 2018-11-01
-#>  6 13928767 Acute Foo… AF      A       Sep 20… area    curre… Aug 20… 2019-08-01
-#>  7 13928767 Acute Foo… AF      A       Sep 20… area    proje… Nov 20… 2019-11-01
-#>  8 15731853 Acute Foo… AF      A       Apr 20… area    curre… Apr 20… 2020-04-01
-#>  9 15731853 Acute Foo… AF      A       Apr 20… area    proje… Jun 20… 2020-06-01
-#> 10 18978466 Acute Foo… AF      A       Sep 20… area    curre… Aug 20… 2020-08-01
+#>    anl_id   title   country condi…¹ analysis…² view_…³ period perio…⁴ analysis…⁵
+#>    <chr>    <chr>   <chr>   <chr>   <date>     <chr>   <chr>  <chr>   <date>    
+#>  1 12166797 Acute … AF      A       2017-05-01 area    curre… May 20… 2017-05-01
+#>  2 12166890 Acute … AF      A       2017-09-01 area    curre… Aug 20… 2017-08-01
+#>  3 12527589 Acute … AF      A       2018-01-01 area    curre… Nov 20… 2017-11-01
+#>  4 12856213 Acute … AF      A       2018-09-01 area    curre… Aug 20… 2018-08-01
+#>  5 12856213 Acute … AF      A       2018-09-01 area    proje… Nov 20… 2018-11-01
+#>  6 13928767 Acute … AF      A       2019-09-01 area    curre… Aug 20… 2019-08-01
+#>  7 13928767 Acute … AF      A       2019-09-01 area    proje… Nov 20… 2019-11-01
+#>  8 15731853 Acute … AF      A       2020-04-01 area    curre… Apr 20… 2020-04-01
+#>  9 15731853 Acute … AF      A       2020-04-01 area    proje… Jun 20… 2020-06-01
+#> 10 18978466 Acute … AF      A       2020-09-01 area    curre… Aug 20… 2020-08-01
 #> # … with 401 more rows, 14 more variables: analysis_period_end <date>,
 #> #   phase3pl_num <int>, phase3pl_pct <dbl>, estimated_population <int>,
 #> #   phase1_num <int>, phase1_pct <dbl>, phase2_num <int>, phase2_pct <dbl>,

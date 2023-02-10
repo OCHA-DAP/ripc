@@ -269,12 +269,16 @@ pivot_population_df <- function(df) {
     )
 }
 
-#' Create new column
+#' Create new columns for dates
+#'
+#' Extracts new columns from `period_dates` for start and end of the period, while
+#' ensuring that the `analysis_date` is converted to a date.
 #'
 #' @noRd
 create_date_columns <- function(df) {
   df %>%
     dplyr::mutate(
+      "analysis_date" := lubridate::dmy(paste("1", .data$analysis_date)),
       "analysis_period_start" := lubridate::floor_date(
         x = lubridate::dmy(
           paste("15", stringr::str_extract(.data$period_dates, "^(.*) -"))

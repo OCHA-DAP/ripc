@@ -57,5 +57,8 @@ clean_icons_df <- function(df) {
     dplyr::rename(
       "area_id" := "aar_id",
       "area_name" := "area"
+    ) %>%
+    dplyr::mutate(
+      "analysis_date" := as.Date(.data$analysis_date)
     )
 }
