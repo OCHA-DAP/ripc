@@ -97,6 +97,7 @@ clean_country_df <- function(df) {
       cols = "phases"
     ) %>%
     dplyr::rename(
+      "anl_id" := "id",
       "num" := "population",
       "pct" := "percentage"
     ) %>%

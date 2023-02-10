@@ -61,5 +61,8 @@ clean_analyses_df <- function(df) {
       .data$country,
       .data$year,
       .data$created
+    ) %>%
+    dplyr::rename(
+      "anl_id" := "id"
     )
 }
