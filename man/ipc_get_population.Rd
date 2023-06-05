@@ -25,11 +25,10 @@ ipc_get_population(
 in the environment.}
 }
 \value{
-A list of 3 data frames:
+A list of 2 data frames:
 \itemize{
 \item Country data frame
 \item Groups data frame
-\item Areas data frame
 }
 }
 \description{
@@ -42,12 +41,10 @@ pass in \code{id}. You cannot pass in both sets of parameters.
 }
 \details{
 Unlike the other \code{ipc_get_..()} family of functions, this returns a list of
-datasets, corresponding to \code{country} data, \code{groups} data, and
-\code{areas}/\code{points}data. The benefit of \code{ipc_get_population()} is that the
+datasets, corresponding to \code{country} and \code{groups} data. The benefit of
+\code{ipc_get_population()} is that the
 returned data for each level of analysis contains all periods of analysis.
-Areas and points data is the lowest level of IPC analysis where population
-estimates for each phase are provided and a general area-level classification
-is made. Groups data, where available, are geographies within a country that
+Groups data, where available, are geographies within a country that
 comprise multiple areas and/or points. There is no phase classification at
 the group level, but populations in each phase are provided. The same applies
 to country-level data.
@@ -56,7 +53,6 @@ These datasets are available elsewhere through:
 \itemize{
 \item Country data: \code{\link[=ipc_get_country]{ipc_get_country()}}
 \item Groups data: Not available through other functions
-\item Areas and points data: \code{\link[=ipc_get_areas]{ipc_get_areas()}}
 }
 
 See the respective function documentation for more details on what each
@@ -66,10 +62,10 @@ comprehensive information on the data and analysis.
 }
 \examples{
 \dontrun{
-# get all areas from the public API
+# get all populations from the public API
 ipc_get_population()
 
-# get areas for specific analysis ID and period from developer API
+# get populations for specific analysis ID and period from developer API
 ipc_get_population(id = 12856213)
 }
 

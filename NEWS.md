@@ -1,3 +1,8 @@
+# Ripc 0.1.4
+
+* Fixed `ipc_get_populations()` by removing calculations for the `areas` data
+frame which was removed from the API
+
 # Ripc 0.1.3
 
 * `ipc_get_icons()` and `ipc_get_populations()` changed so all date columns

@@ -8,12 +8,10 @@
 #' pass in `id`. You cannot pass in both sets of parameters.
 #'
 #' Unlike the other `ipc_get_..()` family of functions, this returns a list of
-#' datasets, corresponding to `country` data, `groups` data, and
-#' `areas`/`points`data. The benefit of `ipc_get_population()` is that the
+#' datasets, corresponding to `country` and `groups` data. The benefit of
+#' `ipc_get_population()` is that the
 #' returned data for each level of analysis contains all periods of analysis.
-#' Areas and points data is the lowest level of IPC analysis where population
-#' estimates for each phase are provided and a general area-level classification
-#' is made. Groups data, where available, are geographies within a country that
+#'  Groups data, where available, are geographies within a country that
 #' comprise multiple areas and/or points. There is no phase classification at
 #' the group level, but populations in each phase are provided. The same applies
 #' to country-level data.
@@ -22,7 +20,6 @@
 #'
 #' * Country data: [ipc_get_country()]
 #' * Groups data: Not available through other functions
-#' * Areas and points data: [ipc_get_areas()]
 #'
 #' See the respective function documentation for more details on what each
 #' dataset comprises or the [IPC website](https://www.ipcinfo.org) and
@@ -35,17 +32,16 @@
 #'
 #' @examples
 #' \dontrun{
-#' # get all areas from the public API
+#' # get all populations from the public API
 #' ipc_get_population()
 #'
-#' # get areas for specific analysis ID and period from developer API
+#' # get populations for specific analysis ID and period from developer API
 #' ipc_get_population(id = 12856213)
 #' }
 #'
-#' @return A list of 3 data frames:
+#' @return A list of 2 data frames:
 #' * Country data frame
 #' * Groups data frame
-#' * Areas data frame
 #'
 #' @export
 ipc_get_population <- function(
@@ -107,7 +103,7 @@ clean_population_df <- function(df) {
     create_date_columns() %>%
     dplyr::select(
       -dplyr::any_of(
-        c("groups", "areas")
+        "groups"
       )
     ) %>%
     dplyr::distinct() %>%
@@ -120,7 +116,7 @@ clean_population_df <- function(df) {
         !sapply(.data$groups, is.null)
       ) %>%
       dplyr::select(
-        -c(dplyr::any_of("areas"), dplyr::matches("^phase|^estimated"))
+        -dplyr::matches("^phase|^estimated")
       ) %>%
       dplyr::mutate(
         "groups" := purrr::map(.data$groups, dplyr::as_tibble)
@@ -145,76 +141,9 @@ clean_population_df <- function(df) {
     groups_df <- NULL
   }
 
-
-  # extract areas data frame
-  # have to do in two stages, extracting areas that don't have groups
-  # then extracting again from areas under groups
-  if ("areas" %in% names(renamed_df)) {
-    renamed_areas_df1 <- renamed_df %>%
-      dplyr::filter(
-        !sapply(.data$areas, is.null)
-      ) %>%
-      dplyr::select(
-        -c(dplyr::any_of("groups"), dplyr::matches("^phase|^estimated"))
-      ) %>%
-      dplyr::mutate(
-        "areas" := purrr::map(.data$areas, dplyr::as_tibble)
-      ) %>%
-      tidyr::unnest(
-        cols = "areas"
-      ) %>%
-      rename_population_df()
-  } else {
-    renamed_areas_df1 <- NULL
-  }
-
-
-  # now extract areas that are under groups
-  if ("groups" %in% names(renamed_df)) {
-    renamed_areas_df2 <- renamed_groups_df %>%
-      dplyr::filter(
-        !sapply(.data$areas, is.null)
-      ) %>%
-      dplyr::mutate(
-        "areas" := purrr::map(.data$areas, dplyr::as_tibble)
-      ) %>%
-      dplyr::select(
-        -c(dplyr::matches("^phase|^estimated"))
-      ) %>%
-      tidyr::unnest(
-        cols = "areas"
-      ) %>%
-      rename_population_df()
-  } else {
-    renamed_areas_df2 <- NULL
-  }
-
-
-  # now combine into a single areas dataset
-  # TODO: remove `-dplyr::starts_with("group")` once
-  # the IPC team fixes the API, currently it duplicates
-  # all areas in a country for each group
-  areas_df <- dplyr::bind_rows(renamed_areas_df1, renamed_areas_df2) %>%
-    pivot_population_df() %>%
-    dplyr::filter(
-      .data$period_dates != ""
-    ) %>%
-    create_date_columns() %>%
-    dplyr::distinct(
-      dplyr::across(
-        -dplyr::starts_with("group") # TODO: remove once API is fixed
-      )
-    ) %>%
-    dplyr::rename(
-      "area_id" := "id",
-      "area_name" := "name"
-    ) %>%
-    arrange_population_df()
-
   list(
     "country" = country_df,
-    "groups" = groups_df,
-    "areas" = areas_df
+    "groups" = groups_df
   )
 }
 
