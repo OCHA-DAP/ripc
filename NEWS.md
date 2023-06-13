@@ -1,3 +1,8 @@
+# Ripc 0.1.5
+
+* Added `areas` output back to `ipc_get_populations()` as it was added back
+to the IPC API
+
 # Ripc 0.1.4
 
 * Fixed `ipc_get_populations()` by removing calculations for the `areas` data

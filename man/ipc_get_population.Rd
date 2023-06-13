@@ -41,11 +41,14 @@ pass in \code{id}. You cannot pass in both sets of parameters.
 }
 \details{
 Unlike the other \code{ipc_get_..()} family of functions, this returns a list of
-datasets, corresponding to \code{country} and \code{groups} data. The benefit of
+datasets, corresponding to \code{country}, \code{areas}, and \code{groups} data. The benefit of
 \code{ipc_get_population()} is that the
 returned data for each level of analysis contains all periods of analysis.
 Groups data, where available, are geographies within a country that
-comprise multiple areas and/or points. There is no phase classification at
+comprise multiple areas and/or points.
+Areas and points data is the lowest level of IPC analysis where population
+estimates for each phase are provided and a general area-level classification
+is made. There is no phase classification at
 the group level, but populations in each phase are provided. The same applies
 to country-level data.
 
