@@ -37,27 +37,32 @@ in a list.
 library(Ripc)
 
 df_list <- ipc_get_population()
+#> Warning: There were 2 warnings in `dplyr::mutate()`.
+#> The first warning was:
+#> ℹ In argument: `analysis_period_start = lubridate::floor_date(...)`.
+#> Caused by warning:
+#> !  24 failed to parse.
+#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.
 df_list$country
-#> # A tibble: 411 × 23
-#>    anl_id   title   country condi…¹ analysis…² view_…³ period perio…⁴ analysis…⁵
-#>    <chr>    <chr>   <chr>   <chr>   <date>     <chr>   <chr>  <chr>   <date>    
-#>  1 12166797 Acute … AF      A       2017-05-01 area    curre… May 20… 2017-05-01
-#>  2 12166890 Acute … AF      A       2017-09-01 area    curre… Aug 20… 2017-08-01
-#>  3 12527589 Acute … AF      A       2018-01-01 area    curre… Nov 20… 2017-11-01
-#>  4 12856213 Acute … AF      A       2018-09-01 area    curre… Aug 20… 2018-08-01
-#>  5 12856213 Acute … AF      A       2018-09-01 area    proje… Nov 20… 2018-11-01
-#>  6 13928767 Acute … AF      A       2019-09-01 area    curre… Aug 20… 2019-08-01
-#>  7 13928767 Acute … AF      A       2019-09-01 area    proje… Nov 20… 2019-11-01
-#>  8 15731853 Acute … AF      A       2020-04-01 area    curre… Apr 20… 2020-04-01
-#>  9 15731853 Acute … AF      A       2020-04-01 area    proje… Jun 20… 2020-06-01
-#> 10 18978466 Acute … AF      A       2020-09-01 area    curre… Aug 20… 2020-08-01
-#> # … with 401 more rows, 14 more variables: analysis_period_end <date>,
-#> #   phase3pl_num <int>, phase3pl_pct <dbl>, estimated_population <int>,
-#> #   phase1_num <int>, phase1_pct <dbl>, phase2_num <int>, phase2_pct <dbl>,
-#> #   phase3_num <int>, phase3_pct <dbl>, phase4_num <int>, phase4_pct <dbl>,
-#> #   phase5_num <int>, phase5_pct <dbl>, and abbreviated variable names
-#> #   ¹​condition, ²​analysis_date, ³​view_level, ⁴​period_dates,
-#> #   ⁵​analysis_period_start
+#> # A tibble: 663 × 24
+#>    anl_id   title   country condition analysis_date view_level ipc_period period
+#>    <chr>    <chr>   <chr>   <chr>     <date>        <chr>      <chr>      <chr> 
+#>  1 12166797 Acute … AF      A         2017-05-01    area       A          curre…
+#>  2 12166890 Acute … AF      A         2017-09-01    area       A          curre…
+#>  3 12527589 Acute … AF      A         2018-01-01    area       A          curre…
+#>  4 12856213 Acute … AF      A         2018-09-01    area       A          curre…
+#>  5 12856213 Acute … AF      A         2018-09-01    area       A          proje…
+#>  6 13928767 Acute … AF      A         2019-09-01    area       A          curre…
+#>  7 13928767 Acute … AF      A         2019-09-01    area       A          proje…
+#>  8 15731853 Acute … AF      A         2020-04-01    area       A          curre…
+#>  9 15731853 Acute … AF      A         2020-04-01    area       A          proje…
+#> 10 18978466 Acute … AF      A         2020-09-01    area       A          curre…
+#> # ℹ 653 more rows
+#> # ℹ 16 more variables: period_dates <chr>, analysis_period_start <date>,
+#> #   analysis_period_end <date>, phase3pl_num <int>, phase3pl_pct <dbl>,
+#> #   estimated_population <int>, phase1_num <int>, phase1_pct <dbl>,
+#> #   phase2_num <int>, phase2_pct <dbl>, phase3_num <int>, phase3_pct <dbl>,
+#> #   phase4_num <int>, phase4_pct <dbl>, phase5_num <int>, phase5_pct <dbl>
 ```
 
 More details on the API are available below.
@@ -142,53 +147,6 @@ changes made to the outputs are documented here.
   the dataset, representing the start of an analysis period (1st day of
   the first month) and end of an analysis period (last day of the last
   month).
-
-## Humanitarian Data Exchange data
-
-[![Lifecycle:
-deprecated](https://img.shields.io/badge/lifecycle-deprecated-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#deprecated)
-
-Usage of functions to access data from the Humanitarian Data Exchange
-are deprecated. These will be removed in future versions once the API
-access is stable.
-
-IPC data is stored on the [Humanitarian Data
-Exchange](https://data.humdata.org/dataset/ipc-country-data), and this
-package provides a simple interface to pull this data directly. However,
-the data is also stored in a format not readily usable for analysis or
-visualization. Thus, this package also automatically wrangles the data
-into a format prepared for analysis. This functionality is documented
-within `ipc_download()` and `ipc_wrangle()` respectively.
-
-For the user, all that is needed is a simple one liner.
-
-``` r
-ipc_download()
-#> Warning: `ipc_download()` has been deprecated as the recommended functions for
-#> downloading IPC data directly pull from the IPC API. `ipc_get_population()`
-#> most directly replicates the functionality of the deprecated `ipc_download()`
-#> function.
-#> # A tibble: 15,597 × 25
-#>    country     level_…¹ area  area_id analy…² date_of_…³ count…⁴ analy…⁵ popul…⁶
-#>    <chr>       <chr>    <chr>   <dbl> <chr>   <date>       <int> <chr>     <dbl>
-#>  1 Afghanistan <NA>     Bada…  2.51e7 Acute … 2022-03-01       1 current 1401209
-#>  2 Afghanistan <NA>     Bada…  2.51e7 Acute … 2022-03-01       1 first_… 1401209
-#>  3 Afghanistan <NA>     Badg…  2.51e7 Acute … 2022-03-01       1 current  730566
-#>  4 Afghanistan <NA>     Badg…  2.51e7 Acute … 2022-03-01       1 first_…  730566
-#>  5 Afghanistan <NA>     Bagh…  2.51e7 Acute … 2022-03-01       1 current 1077131
-#>  6 Afghanistan <NA>     Bagh…  2.51e7 Acute … 2022-03-01       1 first_… 1077131
-#>  7 Afghanistan <NA>     Bagh…  2.51e7 Acute … 2022-03-01       1 current  271631
-#>  8 Afghanistan <NA>     Bagh…  2.51e7 Acute … 2022-03-01       1 first_…  271631
-#>  9 Afghanistan <NA>     Balkh  2.51e7 Acute … 2022-03-01       1 current 1356012
-#> 10 Afghanistan <NA>     Balkh  2.51e7 Acute … 2022-03-01       1 first_… 1356012
-#> # … with 15,587 more rows, 16 more variables: phase <dbl>,
-#> #   analysis_period <chr>, analysis_period_start <date>,
-#> #   analysis_period_end <date>, phase_1_num <dbl>, phase_1_pct <dbl>,
-#> #   phase_2_num <dbl>, phase_2_pct <dbl>, phase_3_num <dbl>, phase_3_pct <dbl>,
-#> #   phase_4_num <dbl>, phase_4_pct <dbl>, phase_5_num <dbl>, phase_5_pct <dbl>,
-#> #   phase_3pl_num <dbl>, phase_3pl_pct <dbl>, and abbreviated variable names
-#> #   ¹​level_1_name, ²​analysis_name, ³​date_of_analysis, ⁴​country_group, …
-```
 
 ## Memoisation
 

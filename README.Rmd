@@ -56,27 +56,6 @@ More details on the API are available below.
 ```{r child="vignettes/ipc-api.Rmd"}
 ```
 
-## Humanitarian Data Exchange data
-
-[![Lifecycle: deprecated](https://img.shields.io/badge/lifecycle-deprecated-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#deprecated)
-
-Usage of functions to access data from the Humanitarian Data Exchange are
-deprecated. These will be removed in future versions once the API access is
-stable.
-
-IPC data is stored on the [Humanitarian Data Exchange](https://data.humdata.org/dataset/ipc-country-data), and this package
-provides a simple interface to pull this data directly. However, the data is
-also stored in a format not readily usable for analysis or visualization. Thus,
-this package also automatically wrangles the data into a format prepared for
-analysis. This functionality is documented within `ipc_download()` and
-`ipc_wrangle()` respectively.
-
-For the user, all that is needed is a simple one liner.
-
-```{r hdx-download, message = FALSE}
-ipc_download()
-```
-
 ## Memoisation
 
 `ipc_get()`, the function that makes requests to the IPC API, has cached

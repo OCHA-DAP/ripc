@@ -1,3 +1,7 @@
+# Ripc 0.1.6
+
+* Removed HDX download functionality, and no longer depend on the rhdx package
+
 # Ripc 0.1.5
 
 * Added `areas` output back to `ipc_get_populations()` as it was added back
