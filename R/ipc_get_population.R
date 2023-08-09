@@ -275,23 +275,26 @@ pivot_population_df <- function(df) {
 #'
 #' @noRd
 create_date_columns <- function(df) {
-  df %>%
-    dplyr::mutate(
-      "analysis_date" := lubridate::dmy(paste("1", .data$analysis_date)),
-      "analysis_period_start" := lubridate::floor_date(
-        x = lubridate::dmy(
-          paste("15", stringr::str_extract(.data$period_dates, "^(.*) -"))
-        ),
-        unit = "month"
-      ),
-      "analysis_period_end" := lubridate::ceiling_date(
-        x = lubridate::dmy(
-          paste("15", stringr::str_extract(.data$period_dates, "- (.*)$"))
-        ),
-        unit = "month"
-      ) - lubridate::days(1),
-      .after = "period_dates"
-    )
+  df$analysis_date <- lubridate::dmy(paste("1", df$analysis_date))
+
+  # only create next columns when dates exist
+  # to avoid creation of warnings
+  has_dates <- !is.na(df$period_dates) & df$period_dates != ""
+  df[has_dates, "analysis_period_start"] <- lubridate::floor_date(
+    x = lubridate::dmy(
+      paste("15", stringr::str_extract(df$period_dates[has_dates], "^(.*) -"))
+    ),
+    unit = "month"
+  )
+
+  df[has_dates, "analysis_period_end"] <- lubridate::ceiling_date(
+    x = lubridate::dmy(
+      paste("15", stringr::str_extract(df$period_dates[has_dates], "- (.*)$"))
+    ),
+    unit = "month"
+  ) - lubridate::days(1)
+
+  df
 }
 
 #' Arrange population data frames

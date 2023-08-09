@@ -1,3 +1,8 @@
+# Ripc 0.1.7
+
+* Adjusted `create_date_columns()` to avoid warnings when parsing missing
+values in the `period_dates` column.
+
 # Ripc 0.1.6
 
 * Removed HDX download functionality, and no longer depend on the rhdx package
