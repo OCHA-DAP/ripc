@@ -158,6 +158,4 @@ wrangling done.
 ## Help and issues
 
 For any help, please file an issue on
-[Github](https://github.com/OCHA-DAP/Ripc/issues). If the issue relates
-to downloading the data from HDX, please refer to the [rhdx
-package](https://github.com/dickoa/rhdx).
+[Github](https://github.com/OCHA-DAP/Ripc/issues).

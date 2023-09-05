@@ -7,6 +7,7 @@ returned direct from the API, and fully document cleaning in each function.
 * Improve date wrangling to avoid generating warnings for rows without explicit
 dates.
 * Add examples and explicit return values for all functions.
+* Memoisation functionality dropped to meet CRAN requirements.
 * Initial CRAN release.
 
 # Ripc 0.1.7
