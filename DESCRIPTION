@@ -6,7 +6,7 @@ Authors@R:
       given = "Seth",
       family = "Caldwell", 
       email = "caldwellst@gmail.com",
-      role = c("aut", "cre")
+      role = c("aut", "cre", "cph")
     )
 Description: Utilities to access Integrated Food Security Phase Classification
     (IPC) and Cadre Harmonisé (CH) food security data. Wrapper functions are
