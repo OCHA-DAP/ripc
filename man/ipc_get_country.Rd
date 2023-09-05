@@ -4,7 +4,13 @@
 \alias{ipc_get_country}
 \title{Get country resources from the IPC API}
 \usage{
-ipc_get_country(country = NULL, year = NULL, type = NULL, api_key = NULL)
+ipc_get_country(
+  country = NULL,
+  year = NULL,
+  type = NULL,
+  api_key = NULL,
+  tidy_df = TRUE
+)
 }
 \arguments{
 \item{country}{ISO2 country code.}
@@ -19,14 +25,20 @@ data for all types.}
 
 \item{api_key}{IPC API key. If \code{NULL} (the default), looks for \code{IPC_API_KEY}
 in the environment.}
+
+\item{tidy_df}{If \code{TRUE}, returns a tidy data frame wrangled as described in
+the Tidy section of the documentation. If \code{FALSE}, returns
+the data frame as returned direct from the IPC-CH API.}
 }
 \value{
-A data frame.
+Data frame of IPC and CH analysis at the country level. Refer to the
+\href{https://docs.api.ipcinfo.org}{IPC-CH Public API documentation} for details
+on the returned values, with variables described in full in the \href{https://observablehq.com/@ipc/ipc-api-extended-documentation}{extended documentation}.
 }
 \description{
 Accesses the country resources on the IPC API. Contains detailed
 country-level data. If \code{country}, \code{year} and/or \code{type} parameters are passed,
-accesses the \strong{country} public API endpoint and pulls in all country data
+accesses the \strong{country} simplified API endpoint and pulls in all country data
 filtered to those parameters.
 }
 \details{
@@ -41,13 +53,29 @@ periods.
 See the \href{https://www.ipcinfo.org}{IPC website} and
 \href{https://docs.api.ipcinfo.org}{API documentation} for more information.
 }
+\section{Tidy}{
+
+When \code{tidy_df} is \code{TRUE}, the following changes are made to the initial
+output to ensure each row represents a single country analysis, and all estimates
+and values are stored as columns:
+\enumerate{
+\item \code{analysis_period_start} and \code{analysis_period_end} created as \code{Date} columns
+from the \code{from} and \code{to} columns respectively, allocating the day of the
+start and end periods to be the 15th of the month.
+\item \code{phases} is unnested from a list column to bring the phase data into
+the main data frame.
+\item The population estimates are pivoted to a wider format with names \code{phase#_num}
+and \code{phase#_pct}.
+\item \code{id} column is renamed to be \code{analysis_id}.
+}
+}
+
 \examples{
-\dontrun{
-# get all areas from the public API
+\dontshow{if (!is.na(Sys.getenv("IPC_API_KEY", unset = NA))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# get all areas from the simplified API
 ipc_get_country()
 
 # get country data just for Somalia
 ipc_get_country(country = "SO")
-}
-
+\dontshow{\}) # examplesIf}
 }

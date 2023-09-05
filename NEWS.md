@@ -1,3 +1,14 @@
+# Ripc 0.2.0
+
+* Change `anl_id` column to always be `analysis_id`.
+* Implement optional `tidy_df` parameter so user can choose to receive data as
+returned direct from the API, and fully document cleaning in each function.
+* Update documentation to match the new simplified and advanced API endpoints.
+* Improve date wrangling to avoid generating warnings for rows without explicit
+dates.
+* Add examples and explicit return values for all functions.
+* Initial CRAN release.
+
 # Ripc 0.1.7
 
 * Adjusted `create_date_columns()` to avoid warnings when parsing missing

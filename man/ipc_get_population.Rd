@@ -9,7 +9,8 @@ ipc_get_population(
   start = NULL,
   end = NULL,
   id = NULL,
-  api_key = NULL
+  api_key = NULL,
+  tidy_df = TRUE
 )
 }
 \arguments{
@@ -23,20 +24,29 @@ ipc_get_population(
 
 \item{api_key}{IPC API key. If \code{NULL} (the default), looks for \code{IPC_API_KEY}
 in the environment.}
+
+\item{tidy_df}{If \code{TRUE}, returns a tidy data frame wrangled as described in
+the Tidy section of the documentation. If \code{FALSE}, returns
+the data frame as returned direct from the IPC-CH API.}
 }
 \value{
-A list of 2 data frames:
+A list of 3 data frames:
 \itemize{
-\item Country data frame
-\item Groups data frame
+\item Country data frame.
+\item Areas data frame.
+\item Groups data frame.
 }
+
+Refer to the \href{https://docs.api.ipcinfo.org}{IPC-CH Public API documentation}
+for details on the returned values, with variables described in full in the
+\href{https://observablehq.com/@ipc/ipc-api-extended-documentation}{extended documentation}.
 }
 \description{
 Accesses the population resources on the IPC API. Contains detailed
 population data. If \code{country} and/or \code{start} and \code{end} parameters are passed,
-accesses the \strong{population} developer API endpoint and pulls in all data.
+accesses the \strong{population} advanced API endpoint and pulls in all data.
 filtered by those parameters. To get the population data for a specific
-analysis, available on the \strong{types/{id}} developer API endpoint,
+analysis, available on the \strong{types/{id}} advanced API endpoint,
 pass in \code{id}. You cannot pass in both sets of parameters.
 }
 \details{
@@ -44,6 +54,7 @@ Unlike the other \code{ipc_get_..()} family of functions, this returns a list of
 datasets, corresponding to \code{country}, \code{areas}, and \code{groups} data. The benefit of
 \code{ipc_get_population()} is that the
 returned data for each level of analysis contains all periods of analysis.
+
 Groups data, where available, are geographies within a country that
 comprise multiple areas and/or points.
 Areas and points data is the lowest level of IPC analysis where population
@@ -55,6 +66,7 @@ to country-level data.
 These datasets are available elsewhere through:
 \itemize{
 \item Country data: \code{\link[=ipc_get_country]{ipc_get_country()}}
+\item Areas data: \code{\link[=ipc_get_areas]{ipc_get_areas()}}
 \item Groups data: Not available through other functions
 }
 
@@ -63,13 +75,34 @@ dataset comprises or the \href{https://www.ipcinfo.org}{IPC website} and
 \href{https://docs.api.ipcinfo.org}{API documentation} for more detailed and
 comprehensive information on the data and analysis.
 }
-\examples{
-\dontrun{
-# get all populations from the public API
-ipc_get_population()
+\section{Tidy}{
 
-# get populations for specific analysis ID and period from developer API
-ipc_get_population(id = 12856213)
+When \code{tidy_df} is \code{TRUE}, the data returned from the population end point is
+transformed into a list of 3 data frames to ensure that each row represents a
+single analysis, and all estimates and values are stored as columns, while
+data at different levels of aggregation are in completely separate data
+frames. The steps are:
+\enumerate{
+\item \code{analysis_period_start} and \code{analysis_period_end} created as \code{Date} columns
+from the \code{period_dates} column respectively, allocating the day of the
+start and end periods to be the 15th of the month.
+\item \code{analysis_date} converted to a date column, using the 15th day of the month.
+\item \code{phases} is unnested from a list column to bring the phase data into
+the main data frame.
+\item The population estimates are pivoted to a wider format with names \code{phase#_num}
+and \code{phase#_pct}.
+\item \code{id} column renamed to \code{analysis_id}.
+\item Data frames are split out so multiple aggregations not present in a single
+single data frame.
+}
 }
 
+\examples{
+\dontshow{if (!is.na(Sys.getenv("IPC_API_KEY", unset = NA))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# get all populations from the simplified API
+ipc_get_population()
+
+# get populations for specific analysis ID from advanced API
+ipc_get_population(id = 12856213)
+\dontshow{\}) # examplesIf}
 }

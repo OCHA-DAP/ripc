@@ -6,7 +6,7 @@
 \alias{Ripc-package}
 \title{Ripc: Download and Process IPC Data}
 \description{
-Download and wrangling functionality for IPC data stored on the Humanitarian Data Exchange.
+Utilities to access Integrated Food Security Phase Classification (IPC) and Cadre Harmonisé (CH) food security data. Wrapper functions are available for all of the IPC-CH Public API simplified and advanced endpoints to easily download the data in a clean and tidy format.
 }
 \author{
 \strong{Maintainer}: Seth Caldwell \email{caldwellst@gmail.com}

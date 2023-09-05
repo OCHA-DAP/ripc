@@ -2,9 +2,9 @@
 #'
 #' Accesses the points resources on the IPC API. Contains detailed area and
 #' population data. If `year` and/or `type` parameters are passed, accesses
-#' the **types** public API endpoint and pulls in all types data or filtered to
+#' the **types** simplified API endpoint and pulls in all types data or filtered to
 #' either `year` or `type`. To get all types for a specific analysis
-#' and period, available on the **types/{id}/{period}** developer API endpoint,
+#' and period, available on the **types/{id}/{period}** advanced API endpoint,
 #' pass in `id` and `period`. You cannot pass in both sets of parameters.
 #'
 #' Points data is IPC data generated from analysis on geographic
@@ -23,16 +23,30 @@
 #'
 #' @inheritParams ipc_get_areas
 #'
-#' @examples
-#' \dontrun{
-#' # get all areas from the public API
+#' @section Tidy:
+#' When `tidy_df` is `TRUE`, the following changes are made to the initial
+#' output to ensure each row represents a single point analysis, and all estimates
+#' and values are stored as columns:
+#'
+#' 1. `phases` is unnested from a list column to bring the phase data into the
+#'     main data frame.
+#' 2. The population estimates are pivoted to a wider format with names `phase#_num`
+#'     and `phase#_pct`.
+#' 3. `aar_id` is renamed to `area_id` and `anl_id` to `analysis_id`.
+#'
+#' @examplesIf !is.na(Sys.getenv("IPC_API_KEY", unset = NA))
+#'
+#' # get all areas from the simplified API
 #' ipc_get_points()
 #'
-#' # get areas for specific analysis ID and period from developer API
+#' # get areas for specific analysis ID and period from advanced API
 #' ipc_get_points(id = 18978466, period = "P")
-#' }
 #'
-#' @return A data frame.
+#' @returns
+#' Data frame of IPC and CH analysis at the point level. Refer to the
+#' [IPC-CH Public API documentation](https://docs.api.ipcinfo.org) for details
+#' on the returned values, with variables described in full in the [extended
+#' documentation](https://observablehq.com/@ipc/ipc-api-extended-documentation).
 #'
 #' @export
 ipc_get_points <- function(
@@ -40,7 +54,8 @@ ipc_get_points <- function(
     type = NULL,
     id = NULL,
     period = NULL,
-    api_key = NULL
+    api_key = NULL,
+    tidy_df = TRUE
   ) {
   assert_id_period(id, period, year, type)
   assert_year(year)
@@ -53,7 +68,11 @@ ipc_get_points <- function(
     type = type
   )
 
-  clean_points_df(df)
+  if (tidy_df) {
+    clean_points_df(df)
+  } else {
+    df
+  }
 }
 
 #' Convert phases list to data frame.
@@ -103,6 +122,7 @@ clean_points_df <- function(df) {
       values_fn = unique # errors in database have a single duplicate
     ) %>%
     dplyr::rename(
-      "area_id" := "aar_id"
+      "area_id" := "aar_id",
+      "analysis_id" := "anl_id"
     )
 }

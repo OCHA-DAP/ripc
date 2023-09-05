@@ -9,7 +9,8 @@ ipc_get_points(
   type = NULL,
   id = NULL,
   period = NULL,
-  api_key = NULL
+  api_key = NULL,
+  tidy_df = TRUE
 )
 }
 \arguments{
@@ -28,16 +29,22 @@ and second projection.}
 
 \item{api_key}{IPC API key. If \code{NULL} (the default), looks for \code{IPC_API_KEY}
 in the environment.}
+
+\item{tidy_df}{If \code{TRUE}, returns a tidy data frame wrangled as described in
+the Tidy section of the documentation. If \code{FALSE}, returns
+the data frame as returned direct from the IPC-CH API.}
 }
 \value{
-A data frame.
+Data frame of IPC and CH analysis at the point level. Refer to the
+\href{https://docs.api.ipcinfo.org}{IPC-CH Public API documentation} for details
+on the returned values, with variables described in full in the \href{https://observablehq.com/@ipc/ipc-api-extended-documentation}{extended documentation}.
 }
 \description{
 Accesses the points resources on the IPC API. Contains detailed area and
 population data. If \code{year} and/or \code{type} parameters are passed, accesses
-the \strong{types} public API endpoint and pulls in all types data or filtered to
+the \strong{types} simplified API endpoint and pulls in all types data or filtered to
 either \code{year} or \code{type}. To get all types for a specific analysis
-and period, available on the \strong{types/{id}/{period}} developer API endpoint,
+and period, available on the \strong{types/{id}/{period}} advanced API endpoint,
 pass in \code{id} and \code{period}. You cannot pass in both sets of parameters.
 }
 \details{
@@ -55,13 +62,27 @@ data is contained within the \code{areas} dataset returned from
 See the \href{https://www.ipcinfo.org}{IPC website} and
 \href{https://docs.api.ipcinfo.org}{API documentation} for more information.
 }
-\examples{
-\dontrun{
-# get all areas from the public API
-ipc_get_points()
+\section{Tidy}{
 
-# get areas for specific analysis ID and period from developer API
-ipc_get_points(id = 18978466, period = "P")
+When \code{tidy_df} is \code{TRUE}, the following changes are made to the initial
+output to ensure each row represents a single point analysis, and all estimates
+and values are stored as columns:
+\enumerate{
+\item \code{phases} is unnested from a list column to bring the phase data into the
+main data frame.
+\item The population estimates are pivoted to a wider format with names \code{phase#_num}
+and \code{phase#_pct}.
+\item \code{aar_id} is renamed to \code{area_id} and \code{anl_id} to \code{analysis_id}.
+}
 }
 
+\examples{
+\dontshow{if (!is.na(Sys.getenv("IPC_API_KEY", unset = NA))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
+# get all areas from the simplified API
+ipc_get_points()
+
+# get areas for specific analysis ID and period from advanced API
+ipc_get_points(id = 18978466, period = "P")
+\dontshow{\}) # examplesIf}
 }

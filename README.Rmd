@@ -21,26 +21,31 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 The goal of Ripc is to provide access to [Integrated Food Security Phase
-Classification](https://www.ipcinfo.org) (IPC) data. 
+Classification](https://www.ipcinfo.org) (IPC) and
+[Cadre Harmonisé](https://www.ipcinfo.org/ch/) (CH) data. 
 
 ## Installation
 
-You can install the Ripc like so:
+You can install the Ripc from CRAN:
+
+```r
+install.packages("Ripc")
+```
+
+The development version can be installed from GitHub:
 
 ``` r
 # install.packages("remotes")
 remotes::install_github("OCHA-DAP/Ripc")
 ```
 
-The package is not currently available on CRAN.
-
 ## Usage
 
-Ripc provides functionality to access IPC data stored directly on the [IPC
-API](https://docs.api.ipcinfo.org). There are a wide set of functions detailed
-further below, but most users will get the information they need from the
-`ipc_get_population()` function which returns datasets of country-level,
-group-level, and area-level analyses in a list.
+Ripc provides functionality to access IPC data stored directly on the
+[IPC-CH Public API](https://docs.api.ipcinfo.org). There are a wider set of
+functions detailed further below, but most users will get the information they
+need from the `ipc_get_population()` function which returns datasets of
+country-level, group-level, and area-level analyses in a list.
 
 ```{r download, message = FALSE}
 library(Ripc)
@@ -55,21 +60,6 @@ More details on the API are available below.
 
 ```{r child="vignettes/ipc-api.Rmd"}
 ```
-
-## Memoisation
-
-`ipc_get()`, the function that makes requests to the IPC API, has cached
-functionality based on `memoise::memoise()` so that all of the
-`ipc_get_...()` family of functions are cached in your local memory in a single
-session. This means that once you've made a call to retrieve data from
-the API, running an identical request will use the cached data rather than
-re-request the data from the IPC database.
-
-If you need to ensure that the Ripc package is making new requests to the API
-each time is called, then you will need to run 
-`memoise::forget(Ripc:::ipc_get)` to clear the cache prior to repeating a call.
-See the documentation of the [memoise package](https://github.com/r-lib/memoise)
-for more details.
 
 ## Help and issues
 
