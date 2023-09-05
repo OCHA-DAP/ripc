@@ -1,5 +1,5 @@
 Package: Ripc
-Title: Download and Process IPC Data
+Title: Download and Tidy IPC and CH Data
 Version: 0.2.0
 Authors@R: 
     person(
