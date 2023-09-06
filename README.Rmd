@@ -13,42 +13,42 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Ripc
+# ripc
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/OCHA-DAP/Ripc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/OCHA-DAP/Ripc/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/OCHA-DAP/ripc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/OCHA-DAP/ripc/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-The goal of Ripc is to provide access to [Integrated Food Security Phase
+The goal of ripc is to provide access to [Integrated Food Security Phase
 Classification](https://www.ipcinfo.org) (IPC) and
 [Cadre Harmonisé](https://www.ipcinfo.org/ch/) (CH) data. 
 
 ## Installation
 
-You can install the Ripc from CRAN:
+You can install the ripc from CRAN:
 
 ```r
-install.packages("Ripc")
+install.packages("ripc")
 ```
 
 The development version can be installed from GitHub:
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("OCHA-DAP/Ripc")
+remotes::install_github("OCHA-DAP/ripc")
 ```
 
 ## Usage
 
-Ripc provides functionality to access IPC data stored directly on the
+ripc provides functionality to access IPC data stored directly on the
 [IPC-CH Public API](https://docs.api.ipcinfo.org). There are a wider set of
 functions detailed further below, but most users will get the information they
 need from the `ipc_get_population()` function which returns datasets of
 country-level, group-level, and area-level analyses in a list.
 
 ```{r download, message = FALSE}
-library(Ripc)
+library(ripc)
 
 df_list <- ipc_get_population()
 df_list$country
@@ -64,4 +64,4 @@ More details on the API are available below.
 ## Help and issues
 
 For any help, please file an issue on
-[Github](https://github.com/OCHA-DAP/Ripc/issues).
+[Github](https://github.com/OCHA-DAP/ripc/issues).

@@ -1,37 +1,37 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Ripc
+# ripc
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/OCHA-DAP/Ripc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/OCHA-DAP/Ripc/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/OCHA-DAP/ripc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/OCHA-DAP/ripc/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-The goal of Ripc is to provide access to [Integrated Food Security Phase
+The goal of ripc is to provide access to [Integrated Food Security Phase
 Classification](https://www.ipcinfo.org) (IPC) and [Cadre
 Harmonisé](https://www.ipcinfo.org/ch/) (CH) data.
 
 ## Installation
 
-You can install the Ripc from CRAN:
+You can install the ripc from CRAN:
 
 ``` r
-install.packages("Ripc")
+install.packages("ripc")
 ```
 
 The development version can be installed from GitHub:
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("OCHA-DAP/Ripc")
+remotes::install_github("OCHA-DAP/ripc")
 ```
 
 ## Usage
 
-Ripc provides functionality to access IPC data stored directly on the
+ripc provides functionality to access IPC data stored directly on the
 [IPC-CH Public API](https://docs.api.ipcinfo.org). There are a wider set
 of functions detailed further below, but most users will get the
 information they need from the `ipc_get_population()` function which
@@ -39,25 +39,25 @@ returns datasets of country-level, group-level, and area-level analyses
 in a list.
 
 ``` r
-library(Ripc)
+library(ripc)
 
 df_list <- ipc_get_population()
 df_list$country
 #> # A tibble: 674 × 24
-#>    anl_id   title   country condition analysis_date view_level ipc_period period
-#>    <chr>    <chr>   <chr>   <chr>     <date>        <chr>      <chr>      <chr> 
-#>  1 12166797 Acute … AF      A         2017-05-01    area       A          curre…
-#>  2 12166890 Acute … AF      A         2017-09-01    area       A          curre…
-#>  3 12527589 Acute … AF      A         2018-01-01    area       A          curre…
-#>  4 12856213 Acute … AF      A         2018-09-01    area       A          curre…
-#>  5 12856213 Acute … AF      A         2018-09-01    area       A          proje…
-#>  6 13928767 Acute … AF      A         2019-09-01    area       A          curre…
-#>  7 13928767 Acute … AF      A         2019-09-01    area       A          proje…
-#>  8 15731853 Acute … AF      A         2020-04-01    area       A          curre…
-#>  9 15731853 Acute … AF      A         2020-04-01    area       A          proje…
-#> 10 18978466 Acute … AF      A         2020-09-01    area       A          curre…
+#>    analysis_id title       country condition analysis_date view_level ipc_period
+#>    <chr>       <chr>       <chr>   <chr>     <date>        <chr>      <chr>     
+#>  1 12166797    Acute Food… AF      A         2017-05-15    area       A         
+#>  2 12166890    Acute Food… AF      A         2017-09-15    area       A         
+#>  3 12527589    Acute Food… AF      A         2018-01-15    area       A         
+#>  4 12856213    Acute Food… AF      A         2018-09-15    area       A         
+#>  5 12856213    Acute Food… AF      A         2018-09-15    area       A         
+#>  6 13928767    Acute Food… AF      A         2019-09-15    area       A         
+#>  7 13928767    Acute Food… AF      A         2019-09-15    area       A         
+#>  8 15731853    Acute Food… AF      A         2020-04-15    area       A         
+#>  9 15731853    Acute Food… AF      A         2020-04-15    area       A         
+#> 10 18978466    Acute Food… AF      A         2020-09-15    area       A         
 #> # ℹ 664 more rows
-#> # ℹ 16 more variables: period_dates <chr>, phase3pl_num <int>,
+#> # ℹ 17 more variables: period <chr>, period_dates <chr>, phase3pl_num <int>,
 #> #   phase3pl_pct <dbl>, estimated_population <int>, phase1_num <int>,
 #> #   phase1_pct <dbl>, phase2_num <int>, phase2_pct <dbl>, phase3_num <int>,
 #> #   phase3_pct <dbl>, phase4_num <int>, phase4_pct <dbl>, phase5_num <int>,
@@ -68,15 +68,15 @@ More details on the API are available below.
 
 ## IPC API
 
-The Ripc functions provide access to API endpoints detailed in the
+The ripc functions provide access to API endpoints detailed in the
 [IPC-CH Public API](https://docs.api.ipcinfo.org) documentation. The
 documentation should be referred to in order to better understand the
 API calls themselves (under the simplified and advanced documentation
 sections), and the returned data. For ease of the user, a table to match
-up the simplified and advanced API endpoints with Ripc functions is
+up the simplified and advanced API endpoints with ripc functions is
 below.
 
-## API and Ripc functions
+## API and ripc functions
 
 In general, the same functions can access both API endpoints, but the
 simplified endpoints are accessed with optional parameters while the
@@ -85,7 +85,7 @@ passed.
 
 ### Simplified API
 
-| Ripc                 | IPC API  |
+| ripc                 | IPC API  |
 |:---------------------|:---------|
 | `ipc_get_analyses()` | analyses |
 | `ipc_get_country()`  | country  |
@@ -95,7 +95,7 @@ passed.
 
 ### Advanced API
 
-| Ripc                                   | IPC API              |
+| ripc                                   | IPC API              |
 |:---------------------------------------|:---------------------|
 | `ipc_get_analyses(id = ###)`           | analysis/{id}        |
 | `ipc_get_areas(id = ###, period = X)`  | areas/{id}/{period}  |
@@ -121,7 +121,7 @@ Make sure that your API key is granted access to the resources you need.
 
 Data coming from the IPC API isn’t immediately joinable, with varying
 naming conventions for geographical name/ID columns. Outputs from the
-Ripc functions are wrangled to ease the joining of datasets together by
+ripc functions are wrangled to ease the joining of datasets together by
 standardizing some column names and keeping the data in a tidy format.
 You can specify `tidy_df = FALSE` for any `ipc_get_...()` function to
 return directly what the IPC-CH Public API returns.
@@ -152,10 +152,10 @@ the outputs to create tidy data are documented below.
   the first month) and end of an analysis period (last day of the last
   month).
 
-Each exported function from Ripc has a Tidy section describing the
+Each exported function from ripc has a Tidy section describing the
 wrangling done.
 
 ## Help and issues
 
 For any help, please file an issue on
-[Github](https://github.com/OCHA-DAP/Ripc/issues).
+[Github](https://github.com/OCHA-DAP/ripc/issues).

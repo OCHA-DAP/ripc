@@ -7,14 +7,14 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-The Ripc functions provide access to API endpoints detailed in the [IPC-CH Public
+The ripc functions provide access to API endpoints detailed in the [IPC-CH Public
 API](https://docs.api.ipcinfo.org) documentation. The documentation should be
 referred to in order to better understand the API calls themselves (under the
 simplified and advanced documentation sections), and the returned data. For
 ease of the user, a table to match up the simplified and advanced API endpoints
-with Ripc functions is below.
+with ripc functions is below.
 
-## API and Ripc functions
+## API and ripc functions
 
 In general, the same functions can access both
 API endpoints, but the simplified endpoints are accessed with optional
@@ -23,7 +23,7 @@ periods are explicitly passed.
 
 ### Simplified API
 
-| Ripc                 | IPC API |
+| ripc                 | IPC API |
 | :------------------- | :---------- |
 | `ipc_get_analyses()` | analyses   |
 | `ipc_get_country()`  | country    |
@@ -33,7 +33,7 @@ periods are explicitly passed.
 
 ### Advanced API
 
-| Ripc                                   | IPC API              |
+| ripc                                   | IPC API              |
 | :------------------------------------- | :------------------- |
 | `ipc_get_analyses(id = ###)`           | analysis/{id}        |
 | `ipc_get_areas(id = ###, period = X)`  | areas/{id}/{period}  |
@@ -59,7 +59,7 @@ Make sure that your API key is granted access to the resources you need.
 ## Output data
 
 Data coming from the IPC API isn't immediately joinable, with varying naming
-conventions for geographical name/ID columns. Outputs from the Ripc functions
+conventions for geographical name/ID columns. Outputs from the ripc functions
 are wrangled to ease the joining of datasets together by standardizing some
 column names and keeping the data in a tidy format. You can specify
 `tidy_df = FALSE` for any `ipc_get_...()` function to return directly what the
@@ -90,5 +90,5 @@ access and manipulate date columns (rather than strings) in the dataset,
 representing the start of an analysis period (1st day of the first month) and
 end of an analysis period (last day of the last month).
 
-Each exported function from Ripc has a Tidy section describing the wrangling
+Each exported function from ripc has a Tidy section describing the wrangling
 done.
