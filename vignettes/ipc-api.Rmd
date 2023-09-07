@@ -7,23 +7,23 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-The Ripc functions provide access to API endpoints detailed in the [IPC
+The ripc functions provide access to API endpoints detailed in the [IPC-CH Public
 API](https://docs.api.ipcinfo.org) documentation. The documentation should be
 referred to in order to better understand the API calls themselves (under the
-public and developer documentation sections), and the returned data. For
-ease of the user, a table to match up the public and developer API endpoints
-with Ripc functions is below.
+simplified and advanced documentation sections), and the returned data. For
+ease of the user, a table to match up the simplified and advanced API endpoints
+with ripc functions is below.
 
-## API and Ripc functions
+## API and ripc functions
 
 In general, the same functions can access both
-API endpoints, but the public API endpoints are accessed with optional
-parameters, but the specific developer endpoints for IDs and/or periods are
-accessed by explicitly specifying those parameters.
+API endpoints, but the simplified endpoints are accessed with optional
+parameters while the advanced endpoints are accessed when IDs and/or
+periods are explicitly passed.
 
-### Public API
+### Simplified API
 
-| Ripc                 | IPC API |
+| ripc                 | IPC API |
 | :------------------- | :---------- |
 | `ipc_get_analyses()` | analyses   |
 | `ipc_get_country()`  | country    |
@@ -31,9 +31,9 @@ accessed by explicitly specifying those parameters.
 | `ipc_get_points()`   | points     |
 | `ipc_get_icons()`    | icons      |
 
-### Developer API
+### Advanced API
 
-| Ripc                                   | IPC API              |
+| ripc                                   | IPC API              |
 | :------------------------------------- | :------------------- |
 | `ipc_get_analyses(id = ###)`           | analysis/{id}        |
 | `ipc_get_areas(id = ###, period = X)`  | areas/{id}/{period}  |
@@ -59,9 +59,13 @@ Make sure that your API key is granted access to the resources you need.
 ## Output data
 
 Data coming from the IPC API isn't immediately joinable, with varying naming
-conventions for geographical name/ID columns. Outputs from the Ripc functions
+conventions for geographical name/ID columns. Outputs from the ripc functions
 are wrangled to ease the joining of datasets together by standardizing some
-column names and keeping the data in a tidy format.
+column names and keeping the data in a tidy format. You can specify
+`tidy_df = FALSE` for any `ipc_get_...()` function to return directly what the
+IPC-CH Public API returns.
+
+### Tidy data
 
 The tidy format means that
 a specific analysis for a period (current, projection, or second projection) and
@@ -70,10 +74,10 @@ columns containing the relevant metadata, phase classification, and population
 figures. Data from mixed levels of geography are not stored in the same dataset.
 
 While full documentation of output data can be derived from the [IPC API schema
-documentation](https://docs.api.ipcinfo.org), some of the key changes made to
-the outputs are documented here.
+documentation](https://docs.api.ipcinfo.org), key changes made to
+the outputs to create tidy data are documented below.
 
-* `anl_id` is used across all datasets to identify the ID for a specific
+* `analysis_id` is used across all datasets to identify the ID for a specific
 analysis.
 * `area_id` and `area_name` is used to identify area and point IDs across the
 datasets.
@@ -86,4 +90,5 @@ access and manipulate date columns (rather than strings) in the dataset,
 representing the start of an analysis period (1st day of the first month) and
 end of an analysis period (last day of the last month).
 
-
+Each exported function from ripc has a Tidy section describing the wrangling
+done.

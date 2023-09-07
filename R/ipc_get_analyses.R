@@ -2,25 +2,37 @@
 #'
 #' Accesses the areas resources on the IPC API. Contains detailed analysis
 #' information. If `country`, `year` and/or `type` parameters are passed,
-#' accesses the **analyses** public API endpoint and pulls in all analyses or
+#' accesses the **analyses** simplified API endpoint and pulls in all analyses or
 #' filtered to those parameters. To get the details for a specific analysis
-#' available on the **anales/{id}/{period}** developer API endpoint,
+#' available on the **analyses/{id}/{period}** advanced API endpoint,
 #' pass in `id`. You cannot pass in both sets of parameters.
 #'
 #' Analyses data is metadata related to specific analyses conducted by the IPC,
 #' including title of the analysis, link to its release page on the IPC website,
 #' and creation/modification dates.
 #'
-#' @inherit ipc_get_areas params return
+#' @inheritParams ipc_get_areas
 #'
-#' @examples
-#' \dontrun{
-#' # get all analyses details from the public API
+#' @section Tidy:
+#' When `tidy_df` is `TRUE`, the following changes are made to the initial
+#' output to ensure each row represents a single analysis:
+#'
+#' 1. `created` and `modified` columns are converted from character columns
+#'     to date columns.
+#' 2. `id` column is renamed to be `analysis_id`.
+#'
+#' @examplesIf !is.na(Sys.getenv("IPC_API_KEY", unset = NA))
+#' # get all analyses details from the simplified API
 #' ipc_get_analyses()
 #'
-#' # get analysis details for a specific ID
+#' # get analysis details for a specific analysis ID
 #' ipc_get_analyses(id = 12856213)
-#' }
+#'
+#' @returns
+#' Data frame of analysis metadata. Refer to the
+#' [IPC-CH Public API documentation](https://docs.api.ipcinfo.org) for details
+#' on the returned values, with variables described in full in the [extended
+#' documentation](https://observablehq.com/@ipc/ipc-api-extended-documentation).
 #'
 #' @export
 ipc_get_analyses <- function(
@@ -28,7 +40,8 @@ ipc_get_analyses <- function(
     year = NULL,
     type = NULL,
     id = NULL,
-    api_key = NULL
+    api_key = NULL,
+    tidy_df = TRUE
   ) {
   assert_id(id, country, year, type)
   assert_country(country)
@@ -43,7 +56,11 @@ ipc_get_analyses <- function(
     type = type
   )
 
-  clean_analyses_df(df)
+  if (tidy_df) {
+    clean_analyses_df(df)
+  } else {
+    df
+  }
 }
 
 #' Clean outputs from analyses API
@@ -63,6 +80,6 @@ clean_analyses_df <- function(df) {
       .data$created
     ) %>%
     dplyr::rename(
-      "anl_id" := "id"
+      "analysis_id" := "id"
     )
 }

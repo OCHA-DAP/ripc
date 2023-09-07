@@ -9,7 +9,8 @@ ipc_get_analyses(
   year = NULL,
   type = NULL,
   id = NULL,
-  api_key = NULL
+  api_key = NULL,
+  tidy_df = TRUE
 )
 }
 \arguments{
@@ -27,16 +28,22 @@ data for all types.}
 
 \item{api_key}{IPC API key. If \code{NULL} (the default), looks for \code{IPC_API_KEY}
 in the environment.}
+
+\item{tidy_df}{If \code{TRUE}, returns a tidy data frame wrangled as described in
+the Tidy section of the documentation. If \code{FALSE}, returns
+the data frame as returned direct from the IPC-CH API.}
 }
 \value{
-A data frame.
+Data frame of analysis metadata. Refer to the
+\href{https://docs.api.ipcinfo.org}{IPC-CH Public API documentation} for details
+on the returned values, with variables described in full in the \href{https://observablehq.com/@ipc/ipc-api-extended-documentation}{extended documentation}.
 }
 \description{
 Accesses the areas resources on the IPC API. Contains detailed analysis
 information. If \code{country}, \code{year} and/or \code{type} parameters are passed,
-accesses the \strong{analyses} public API endpoint and pulls in all analyses or
+accesses the \strong{analyses} simplified API endpoint and pulls in all analyses or
 filtered to those parameters. To get the details for a specific analysis
-available on the \strong{anales/{id}/{period}} developer API endpoint,
+available on the \strong{analyses/{id}/{period}} advanced API endpoint,
 pass in \code{id}. You cannot pass in both sets of parameters.
 }
 \details{
@@ -44,13 +51,23 @@ Analyses data is metadata related to specific analyses conducted by the IPC,
 including title of the analysis, link to its release page on the IPC website,
 and creation/modification dates.
 }
-\examples{
-\dontrun{
-# get all analyses details from the public API
-ipc_get_analyses()
+\section{Tidy}{
 
-# get analysis details for a specific ID
-ipc_get_analyses(id = 12856213)
+When \code{tidy_df} is \code{TRUE}, the following changes are made to the initial
+output to ensure each row represents a single analysis:
+\enumerate{
+\item \code{created} and \code{modified} columns are converted from character columns
+to date columns.
+\item \code{id} column is renamed to be \code{analysis_id}.
+}
 }
 
+\examples{
+\dontshow{if (!is.na(Sys.getenv("IPC_API_KEY", unset = NA))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# get all analyses details from the simplified API
+ipc_get_analyses()
+
+# get analysis details for a specific analysis ID
+ipc_get_analyses(id = 12856213)
+\dontshow{\}) # examplesIf}
 }

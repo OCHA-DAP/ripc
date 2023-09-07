@@ -9,7 +9,8 @@ ipc_get_icons(
   type = NULL,
   id = NULL,
   period = NULL,
-  api_key = NULL
+  api_key = NULL,
+  tidy_df = TRUE
 )
 }
 \arguments{
@@ -28,17 +29,24 @@ and second projection.}
 
 \item{api_key}{IPC API key. If \code{NULL} (the default), looks for \code{IPC_API_KEY}
 in the environment.}
+
+\item{tidy_df}{If \code{TRUE}, returns a tidy data frame wrangled as described in
+the Tidy section of the documentation. If \code{FALSE}, returns
+the data frame as returned direct from the IPC-CH API.}
 }
 \value{
-A data frame.
+Data from of icons for analysis publications.
+Refer to the \href{https://docs.api.ipcinfo.org}{IPC-CH Public API documentation}
+for details on the returned values, with variables described in full in the
+\href{https://observablehq.com/@ipc/ipc-api-extended-documentation}{extended documentation}.
 }
 \description{
 Accesses the icons resources on the IPC API. Contains links from analysis and
 area IDs to the icon resource the IPC uses in maps and publications. This
 is likely \strong{not useful for the general user}. If \code{year} and/or \code{type}
-parameters are passed, accesses the \strong{icons} public API endpoint, pulls in
+parameters are passed, accesses the \strong{icons} simplified API endpoint, pulls in
 data filtered to those parameters. To get all icons for a specific analysis
-and period, available on the \strong{types/{id}/{period}} developer API endpoint,
+and period, available on the \strong{types/{id}/{period}} advanced API endpoint,
 pass in \code{id} and \code{period}. You cannot pass in both sets of parameters.
 }
 \details{
@@ -50,13 +58,19 @@ useful for general users. Provided here for convenience.
 See the \href{https://www.ipcinfo.org}{IPC website} and
 \href{https://docs.api.ipcinfo.org}{API documentation} for more information.
 }
-\examples{
-\dontrun{
-# get all icons from the public API
-ipc_get_icons()
+\section{Tidy}{
 
-# get icons for specific analysis ID and period from developer API
-ipc_get_icons(id = 12135625, period = "C")
+When \code{tidy_df} is \code{TRUE}, \code{aar_id} is renamed to \code{area_id} and \code{area} to
+\code{area_name}.
 }
 
+\examples{
+\dontshow{if (!is.na(Sys.getenv("IPC_API_KEY", unset = NA))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
+# get all icons from the simplified API
+ipc_get_icons()
+
+# get icons for specific analysis ID and period from advanced API
+ipc_get_icons(id = 12135625, period = "C")
+\dontshow{\}) # examplesIf}
 }

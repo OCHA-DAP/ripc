@@ -1,19 +1,24 @@
-Package: Ripc
-Title: Download and Process IPC Data
-Version: 0.1.6
+Package: ripc
+Title: Download and Tidy IPC and CH Data
+Version: 0.2.0
 Authors@R: 
     person(
       given = "Seth",
       family = "Caldwell", 
       email = "caldwellst@gmail.com",
-      role = c("aut", "cre")
+      role = c("aut", "cre", "cph")
     )
-Description: Download and wrangling functionality for IPC data stored
-    on the Humanitarian Data Exchange.
+Description: Utilities to access Integrated Food Security Phase Classification
+    (IPC) and Cadre Harmonisé (CH) food security data. Wrapper functions are
+    available for all of the 'IPC-CH' Public API (<https://docs.api.ipcinfo.org>)
+    simplified and advanced endpoints to easily download the data in a clean and
+    tidy format.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+URL: https://github.com/ocha-dap/ripc
+BugReports: https://github.com/ocha-dap/ripc/issues
 Imports: 
     countrycode,
     dplyr,
@@ -21,7 +26,6 @@ Imports:
     lifecycle,
     lubridate,
     magrittr,
-    memoise,
     purrr,
     rlang,
     stringr,

@@ -2,7 +2,7 @@
 #'
 #' Accesses the country resources on the IPC API. Contains detailed
 #' country-level data. If `country`, `year` and/or `type` parameters are passed,
-#' accesses the **country** public API endpoint and pulls in all country data
+#' accesses the **country** simplified API endpoint and pulls in all country data
 #' filtered to those parameters.
 #'
 #' Country data is the highest level of aggregation for IPC analysis. Data is
@@ -16,25 +16,42 @@
 #' See the [IPC website](https://www.ipcinfo.org) and
 #' [API documentation](https://docs.api.ipcinfo.org) for more information.
 #'
-#' @inherit ipc_get_areas return params
+#' @inheritParams ipc_get_areas
 #'
-#' @examples
-#' \dontrun{
-#' # get all areas from the public API
+#' @section Tidy:
+#' When `tidy_df` is `TRUE`, the following changes are made to the initial
+#' output to ensure each row represents a single country analysis, and all estimates
+#' and values are stored as columns:
+#'
+#' 1. `analysis_period_start` and `analysis_period_end` created as `Date` columns
+#'     from the `from` and `to` columns respectively, allocating the day of the
+#'     start and end periods to be the 15th of the month.
+#' 2. `phases` is unnested from a list column to bring the phase data into
+#'     the main data frame.
+#' 3. The population estimates are pivoted to a wider format with names `phase#_num`
+#'     and `phase#_pct`.
+#' 4. `id` column is renamed to be `analysis_id`.
+#'
+#' @examplesIf !is.na(Sys.getenv("IPC_API_KEY", unset = NA))
+#' # get all areas from the simplified API
 #' ipc_get_country()
 #'
 #' # get country data just for Somalia
 #' ipc_get_country(country = "SO")
-#' }
 #'
-#' @return A data frame.
+#' @returns
+#' Data frame of IPC and CH analysis at the country level. Refer to the
+#' [IPC-CH Public API documentation](https://docs.api.ipcinfo.org) for details
+#' on the returned values, with variables described in full in the [extended
+#' documentation](https://observablehq.com/@ipc/ipc-api-extended-documentation).
 #'
 #' @export
 ipc_get_country <- function(
     country = NULL,
     year = NULL,
     type = NULL,
-    api_key = NULL
+    api_key = NULL,
+    tidy_df = TRUE
   ) {
   assert_country(country)
   assert_year(year)
@@ -48,7 +65,11 @@ ipc_get_country <- function(
     type = type
   )
 
-  clean_country_df(df)
+  if (tidy_df) {
+    clean_country_df(df)
+  } else {
+    df
+  }
 }
 
 #' Convert phases list to data frame.
@@ -72,20 +93,11 @@ clean_country_df <- function(df) {
   # clean up output
   # generate analysis period start and end if present
 
-  if (all(c("to", "from") %in% names(df))) {
-    df <- dplyr::mutate(
-      df,
-      "analysis_period_start" := lubridate::floor_date(
-        x = lubridate::dmy(paste("15", .data$from)),
-        unit = "month"
-      ),
-      "analysis_period_end" := lubridate::ceiling_date(
-        x = lubridate::dmy(paste("15", .data$to)),
-        unit = "month"
-      ) - lubridate::days(1),
-      .after = "to"
-    )
-  }
+  df <- extract_dates(
+    df = df,
+    from_col = "from",
+    to_col = "to"
+  )
 
   # unpack values from phases
 
@@ -97,7 +109,7 @@ clean_country_df <- function(df) {
       cols = "phases"
     ) %>%
     dplyr::rename(
-      "anl_id" := "id",
+      "analysis_id" := "id",
       "num" := "population",
       "pct" := "percentage"
     ) %>%
