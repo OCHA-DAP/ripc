@@ -1,6 +1,8 @@
+# Development
+
 # ripc 0.2.0
 
-* Changeed `anl_id` column to always be `analysis_id`.
+* Changed `anl_id` column to always be `analysis_id`.
 * Implemented optional `tidy_df` parameter so user can choose to receive data as
 returned direct from the API, and fully document cleaning in each function.
 * Updated function documentation and vignettes to match the new simplified and advanced API endpoints.
