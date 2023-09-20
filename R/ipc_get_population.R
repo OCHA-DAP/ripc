@@ -142,7 +142,7 @@ clean_population_df <- function(df) {
     arrange_population_df()
 
   # extract groups data frame
-  if ("groups" %in% names(renamed_df)) {
+  if ("groups" %in% names(renamed_df) && !all(is.na(renamed_df$groups))) {
     renamed_groups_df <- renamed_df %>%
       dplyr::filter(
         !sapply(.data$groups, is.null)
@@ -176,7 +176,7 @@ clean_population_df <- function(df) {
   # extract areas data frame
   # have to do in two stages, extracting areas that don't have groups
   # then extracting again from areas under groups
-  if ("areas" %in% names(renamed_df)) {
+  if ("areas" %in% names(renamed_df) && !all(is.na(renamed_df$areas))) {
     renamed_areas_df1 <- renamed_df %>%
       dplyr::filter(
         !sapply(.data$areas, is.null)
@@ -197,7 +197,7 @@ clean_population_df <- function(df) {
 
 
   # now extract areas that are under groups
-  if ("groups" %in% names(renamed_df)) {
+  if ("groups" %in% names(renamed_df) && "areas" %in% names(renamed_df) && !all(is.na(renamed_df$areas))) {
     renamed_areas_df2 <- renamed_groups_df %>%
       dplyr::filter(
         !sapply(.data$areas, is.null)
@@ -221,22 +221,27 @@ clean_population_df <- function(df) {
   # TODO: remove `-dplyr::starts_with("group")` once
   # the IPC team fixes the API, currently it duplicates
   # all areas in a country for each group
-  areas_df <- dplyr::bind_rows(renamed_areas_df1, renamed_areas_df2) %>%
-    pivot_population_df() %>%
-    dplyr::filter(
-      .data$period_dates != ""
-    ) %>%
-    create_date_columns() %>%
-    dplyr::distinct(
-      dplyr::across(
-        -dplyr::starts_with("group") # TODO: remove once API is fixed
-      )
-    ) %>%
-    dplyr::rename(
-      "area_id" := "id",
-      "area_name" := "name"
-    ) %>%
-    arrange_population_df()
+  if (!all(c(is.null(renamed_areas_df1), is.null(renamed_areas_df2)))) {
+    areas_df <- dplyr::bind_rows(renamed_areas_df1, renamed_areas_df2) %>%
+      pivot_population_df() %>%
+      dplyr::filter(
+        .data$period_dates != ""
+      ) %>%
+      create_date_columns() %>%
+      dplyr::distinct(
+        dplyr::across(
+          -dplyr::starts_with("group") # TODO: remove once API is fixed
+        )
+      ) %>%
+      dplyr::rename(
+        "area_id" := "id",
+        "area_name" := "name"
+      ) %>%
+      arrange_population_df()
+  } else {
+    areas_df <- NULL
+  }
+
 
 
   list(

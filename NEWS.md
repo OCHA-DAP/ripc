@@ -1,5 +1,8 @@
 # Development
 
+* Improved `ipc_get_population()` to deal with missing areas data when it is
+removed from the API.
+
 # ripc 0.2.0
 
 * Changed `anl_id` column to always be `analysis_id`.
