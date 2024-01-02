@@ -2,6 +2,8 @@
 
 * Improved `ipc_get_population()` to deal with missing areas data when it is
 removed from the API.
+* Fixed `assert_start_end()` so it correctly tests `start` and `end` parameters
+without generating an error.
 
 # ripc 0.2.0
 

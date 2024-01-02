@@ -25,7 +25,7 @@ assert_start_end <- function(start, end) {
       X = c(start, end),
       FUN = function(x) length(x) != 1 || x < 2015
     )
-    if (checks || end < start) {
+    if (any(checks) || end < start) {
       stop(
         "`start` and `end` should both be numeric years from 2015 onward, and ",
         "`end` should not be less than the `start` value.",
