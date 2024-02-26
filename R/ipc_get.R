@@ -62,11 +62,28 @@ ipc_get <- function(
       )
     }
 
-    purrr::map_dfr(
+    ipc_list_df <- purrr::map(
       .x = ipc_list,
-      .f = ~ null_converter(.x, drop_metadata = drop_metadata)
-        %>% dplyr::as_tibble()
+      .f = ~ null_converter(.x, drop_metadata = drop_metadata) %>%
+        dplyr::as_tibble()
     )
+
+    ipc_list_df %>%
+      purrr::map(
+        \(dft){
+          dft %>%
+            dplyr::mutate(
+              dplyr::across(
+                dplyr::matches(
+                  "_percentage$"
+                ),
+                ~as.numeric(.x)
+              )
+            )
+        }
+      ) %>%
+      purrr::list_rbind() %>%
+      dplyr::as_tibble()
 }
 
 #' Get IPC API key
