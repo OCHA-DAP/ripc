@@ -71,5 +71,8 @@ clean_icons_df <- function(df) {
     dplyr::rename(
       "area_id" := "aar_id",
       "area_name" := "area"
+    ) |>
+    dplyr::mutate(
+      "year" := as.numeric(.data$year)
     )
 }

@@ -139,6 +139,15 @@ clean_population_df <- function(df) {
       )
     ) %>%
     dplyr::distinct() %>%
+    dplyr::mutate(
+      dplyr::across(
+        .cols = c(
+          dplyr::starts_with("phase"),
+          "estimated_population"
+        ),
+        .fns = as.numeric
+      )
+    ) %>%
     arrange_population_df()
 
   # extract groups data frame

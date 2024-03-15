@@ -72,7 +72,8 @@ clean_analyses_df <- function(df) {
       dplyr::across(
         .cols = c("created", "modified"),
         as.Date
-      )
+      ),
+      "year" := as.numeric(.data$year)
     ) %>%
     dplyr::arrange(
       .data$country,

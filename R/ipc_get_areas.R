@@ -103,7 +103,11 @@ ipc_get_areas <- function(
 #' @noRd
 area_phases_as_df <- function(phases_list) {
   phases_list[["color"]] <- NULL
-  dplyr::as_tibble(phases_list)
+  dplyr::as_tibble(phases_list) %>%
+    dplyr::rename(
+      "num" := "population",
+      "pct" := "percent"
+    )
 }
 
 #' Clean areas data frame
@@ -126,14 +130,11 @@ clean_areas_df <- function(df) {
 
   clean_df <- df %>%
     dplyr::mutate(
-      "phases" := purrr::map(.x = .data$phases, .f = area_phases_as_df)
+      "phases" := purrr::map(.x = .data$phases, .f = area_phases_as_df),
+      "overall_phase" := as.numeric(.data$overall_phase)
     )%>%
     tidyr::unnest(
       cols = "phases"
-    ) %>%
-    dplyr::rename(
-      "num" := "population",
-      "pct" := "percent"
     ) %>%
     dplyr::arrange(
       dplyr::across(
