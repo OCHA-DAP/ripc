@@ -44,7 +44,7 @@ Accesses the points resources on the IPC API. Contains detailed area and
 population data. If \code{year} and/or \code{type} parameters are passed, accesses
 the \strong{types} simplified API endpoint and pulls in all types data or filtered to
 either \code{year} or \code{type}. To get all types for a specific analysis
-and period, available on the \strong{types/{id}/{period}} advanced API endpoint,
+and period, available on the \strong{types/\{id\}/\{period\}} advanced API endpoint,
 pass in \code{id} and \code{period}. You cannot pass in both sets of parameters.
 }
 \details{

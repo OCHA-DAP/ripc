@@ -4,7 +4,7 @@
 #' population data. If `year` and/or `type` parameters are passed, accesses
 #' the **types** simplified API endpoint and pulls in all types data or filtered to
 #' either `year` or `type`. To get all types for a specific analysis
-#' and period, available on the **types/{id}/{period}** advanced API endpoint,
+#' and period, available on the **types/\{id\}/\{period\}** advanced API endpoint,
 #' pass in `id` and `period`. You cannot pass in both sets of parameters.
 #'
 #' Points data is IPC data generated from analysis on geographic

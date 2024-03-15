@@ -4,7 +4,7 @@
 #' population data. If `country`, `year` and/or `type` parameters are passed,
 #' accesses the **areas** simplified API endpoint and pulls in all areas filtered to
 #' those parameters. To get all areas for a specific analysis
-#' and period, available on the **areas/{id}/{period}** advanced API endpoint,
+#' and period, available on the **areas/\{id\}/\{period\}** advanced API endpoint,
 #' pass in `id` and `period`. You cannot pass in both sets of parameters.
 #'
 #' Areas data is the typical unit of analysis in IPC-CH outputs. These are

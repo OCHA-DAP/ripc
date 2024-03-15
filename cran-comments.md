@@ -2,4 +2,5 @@
 
 0 errors | 0 warnings | 0 note
 
-* This is a resubmission.
+* Fixed Markdown errors for unescaped curly braces that were not previously
+an issue in CRAN submissions.

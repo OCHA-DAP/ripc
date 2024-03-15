@@ -4,7 +4,7 @@
 #' information. If `country`, `year` and/or `type` parameters are passed,
 #' accesses the **analyses** simplified API endpoint and pulls in all analyses or
 #' filtered to those parameters. To get the details for a specific analysis
-#' available on the **analyses/{id}/{period}** advanced API endpoint,
+#' available on the **analyses/\{id\}/\{period\}** advanced API endpoint,
 #' pass in `id`. You cannot pass in both sets of parameters.
 #'
 #' Analyses data is metadata related to specific analyses conducted by the IPC,
