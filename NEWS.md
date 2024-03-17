@@ -1,9 +1,13 @@
-# Development
+# ripc 0.2.1
 
 * Improved `ipc_get_population()` to deal with missing areas data when it is
 removed from the API.
 * Fixed `assert_start_end()` so it correctly tests `start` and `end` parameters
 without generating an error.
+* Fixed `ipc_get()` to initially read all numeric vectors as character in as
+some errors were created in nested data frames that only contained integers.
+* Ensured that all `ipg_get_...()` functions returned properly parsed numeric
+columns and fixed some unnesting data frames in `ipc_get_areas()`.
 
 # ripc 0.2.0
 

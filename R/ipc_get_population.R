@@ -4,7 +4,7 @@
 #' population data. If `country` and/or `start` and `end` parameters are passed,
 #' accesses the **population** advanced API endpoint and pulls in all data.
 #' filtered by those parameters. To get the population data for a specific
-#' analysis, available on the **types/{id}** advanced API endpoint,
+#' analysis, available on the **types/\{id\}** advanced API endpoint,
 #' pass in `id`. You cannot pass in both sets of parameters.
 #'
 #' Unlike the other `ipc_get_..()` family of functions, this returns a list of
@@ -139,6 +139,15 @@ clean_population_df <- function(df) {
       )
     ) %>%
     dplyr::distinct() %>%
+    dplyr::mutate(
+      dplyr::across(
+        .cols = c(
+          dplyr::starts_with("phase"),
+          "estimated_population"
+        ),
+        .fns = as.numeric
+      )
+    ) %>%
     arrange_population_df()
 
   # extract groups data frame

@@ -46,7 +46,7 @@ Accesses the population resources on the IPC API. Contains detailed
 population data. If \code{country} and/or \code{start} and \code{end} parameters are passed,
 accesses the \strong{population} advanced API endpoint and pulls in all data.
 filtered by those parameters. To get the population data for a specific
-analysis, available on the \strong{types/{id}} advanced API endpoint,
+analysis, available on the \strong{types/\{id\}} advanced API endpoint,
 pass in \code{id}. You cannot pass in both sets of parameters.
 }
 \details{

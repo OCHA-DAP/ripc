@@ -47,7 +47,7 @@ Accesses the areas resources on the IPC-CH API. Contains detailed area and
 population data. If \code{country}, \code{year} and/or \code{type} parameters are passed,
 accesses the \strong{areas} simplified API endpoint and pulls in all areas filtered to
 those parameters. To get all areas for a specific analysis
-and period, available on the \strong{areas/{id}/{period}} advanced API endpoint,
+and period, available on the \strong{areas/\{id\}/\{period\}} advanced API endpoint,
 pass in \code{id} and \code{period}. You cannot pass in both sets of parameters.
 }
 \details{

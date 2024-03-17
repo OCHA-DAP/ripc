@@ -5,7 +5,7 @@
 #' is likely **not useful for the general user**. If `year` and/or `type`
 #' parameters are passed, accesses the **icons** simplified API endpoint, pulls in
 #' data filtered to those parameters. To get all icons for a specific analysis
-#' and period, available on the **types/{id}/{period}** advanced API endpoint,
+#' and period, available on the **types/\{id\}/\{period\}** advanced API endpoint,
 #' pass in `id` and `period`. You cannot pass in both sets of parameters.
 #'
 #' Icons data is used internally by the IPC to link up analyses for areas and a
@@ -71,5 +71,8 @@ clean_icons_df <- function(df) {
     dplyr::rename(
       "area_id" := "aar_id",
       "area_name" := "area"
+    ) |>
+    dplyr::mutate(
+      "year" := as.numeric(.data$year)
     )
 }

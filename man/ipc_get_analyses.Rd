@@ -43,7 +43,7 @@ Accesses the areas resources on the IPC API. Contains detailed analysis
 information. If \code{country}, \code{year} and/or \code{type} parameters are passed,
 accesses the \strong{analyses} simplified API endpoint and pulls in all analyses or
 filtered to those parameters. To get the details for a specific analysis
-available on the \strong{analyses/{id}/{period}} advanced API endpoint,
+available on the \strong{analyses/\{id\}/\{period\}} advanced API endpoint,
 pass in \code{id}. You cannot pass in both sets of parameters.
 }
 \details{

@@ -80,9 +80,13 @@ ipc_get_country <- function(
 #' @param phases_list Phases list
 #'
 #' @noRd
-point_phases_as_df <- function(phases_list) {
+country_phases_as_df <- function(phases_list) {
   phases_list[["overall_phase"]] <- NULL
-  dplyr::as_tibble(phases_list)
+  dplyr::as_tibble(phases_list) %>%
+    dplyr::rename(
+      "num" := "population",
+      "pct" := "percentage"
+    )
 }
 
 
@@ -103,15 +107,14 @@ clean_country_df <- function(df) {
 
   df %>%
     dplyr::mutate(
-      "phases" := purrr::map(.x = .data$phases, .f = area_phases_as_df)
+      "phases" := purrr::map(.x = .data$phases, .f = country_phases_as_df),
+      "population" := as.numeric(.data$population)
     )%>%
     tidyr::unnest(
       cols = "phases"
     ) %>%
     dplyr::rename(
-      "analysis_id" := "id",
-      "num" := "population",
-      "pct" := "percentage"
+      "analysis_id" := "id"
     ) %>%
     dplyr::arrange(
       dplyr::across(

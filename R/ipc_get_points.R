@@ -4,7 +4,7 @@
 #' population data. If `year` and/or `type` parameters are passed, accesses
 #' the **types** simplified API endpoint and pulls in all types data or filtered to
 #' either `year` or `type`. To get all types for a specific analysis
-#' and period, available on the **types/{id}/{period}** advanced API endpoint,
+#' and period, available on the **types/\{id\}/\{period\}** advanced API endpoint,
 #' pass in `id` and `period`. You cannot pass in both sets of parameters.
 #'
 #' Points data is IPC data generated from analysis on geographic
@@ -94,10 +94,26 @@ point_phases_as_df <- function(phases_list) {
 clean_points_df <- function(df) {
   df %>%
     dplyr::mutate(
-      "phases" := purrr::map(.x = .data$phases, .f = point_phases_as_df)
+      "phases" := purrr::map(.x = .data$phases, .f = point_phases_as_df),
     ) %>%
     tidyr::unnest(
       cols = "phases"
+    ) %>%
+    dplyr::mutate(
+      dplyr::across(
+        .cols = dplyr::any_of(
+          c(
+            "population_min",
+            "population_percentage_min",
+            "estimated_population_current",
+            "estimated_population_projected",
+            "estimated_population_projected2",
+            "census_population",
+            "year"
+          )
+        ),
+        .fns = as.numeric
+      )
     ) %>%
     dplyr::rename(
       "num" := "population",

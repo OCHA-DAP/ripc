@@ -64,8 +64,14 @@ ipc_get <- function(
 
     purrr::map_dfr(
       .x = ipc_list,
-      .f = ~ null_converter(.x, drop_metadata = drop_metadata)
-        %>% dplyr::as_tibble()
+      .f = ~ null_converter(.x, drop_metadata = drop_metadata) %>%
+        dplyr::as_tibble() %>%
+        dplyr::mutate(
+          dplyr::across(
+            .cols = dplyr::everything(),
+            .fns = ~ if (is.numeric(.x)) as.character(.x) else .x
+          )
+        )
     )
 }
 

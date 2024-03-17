@@ -46,7 +46,7 @@ area IDs to the icon resource the IPC uses in maps and publications. This
 is likely \strong{not useful for the general user}. If \code{year} and/or \code{type}
 parameters are passed, accesses the \strong{icons} simplified API endpoint, pulls in
 data filtered to those parameters. To get all icons for a specific analysis
-and period, available on the \strong{types/{id}/{period}} advanced API endpoint,
+and period, available on the \strong{types/\{id\}/\{period\}} advanced API endpoint,
 pass in \code{id} and \code{period}. You cannot pass in both sets of parameters.
 }
 \details{
