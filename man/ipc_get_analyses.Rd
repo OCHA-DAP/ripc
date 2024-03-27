@@ -56,8 +56,7 @@ and creation/modification dates.
 When \code{tidy_df} is \code{TRUE}, the following changes are made to the initial
 output to ensure each row represents a single analysis:
 \enumerate{
-\item \code{created} and \code{modified} columns are converted from character columns
-to date columns.
+\item The data is arranged by \code{country}, \code{year}, and \code{created}.
 \item \code{id} column is renamed to be \code{analysis_id}.
 }
 }

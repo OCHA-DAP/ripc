@@ -3,6 +3,7 @@
 
 ## usethis namespace: start
 #' @importFrom lifecycle deprecated
-#' @importFrom magrittr %>%
+#' @importFrom rlang := .data
+#' @importFrom dplyr %>%
 ## usethis namespace: end
 NULL

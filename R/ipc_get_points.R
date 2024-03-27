@@ -28,11 +28,8 @@
 #' output to ensure each row represents a single point analysis, and all estimates
 #' and values are stored as columns:
 #'
-#' 1. `phases` is unnested from a list column to bring the phase data into the
-#'     main data frame.
-#' 2. The population estimates are pivoted to a wider format with names `phase#_num`
-#'     and `phase#_pct`.
-#' 3. `aar_id` is renamed to `area_id` and `anl_id` to `analysis_id`.
+#' 1. All columns containing `phase` or `population` are converted to numeric.
+#' 2. `aar_id` is renamed to `area_id` and `anl_id` to `analysis_id`.
 #'
 #' @examplesIf !is.na(Sys.getenv("IPC_API_KEY", unset = NA))
 #'
@@ -63,6 +60,8 @@ ipc_get_points <- function(
 
   df <- ipc_get(
     resource = paste(c("points", id, period), collapse = "/"),
+    return_format = "json",
+    pass_format = FALSE,
     api_key = api_key,
     year = year,
     type = type
@@ -75,49 +74,22 @@ ipc_get_points <- function(
   }
 }
 
-#' Convert phases list to data frame.
-#'
-#' Cleans up the phases list to allow unnesting. Drops the `overall_phase`
-#' column, then converts to data frame.
-#'
-#' @param phases_list Phases list
-#'
-#' @noRd
-point_phases_as_df <- function(phases_list) {
-  phases_list[["overall_phase"]] <- NULL
-  dplyr::as_tibble(phases_list)
-}
-
 #' Clean up points data
 #'
 #' @noRd
 clean_points_df <- function(df) {
-  df %>%
-    dplyr::mutate(
-      "phases" := purrr::map(.x = .data$phases, .f = point_phases_as_df),
+  df  %>%
+    dplyr::select(
+      -dplyr::any_of("overall_phase")
     ) %>%
     tidyr::unnest(
       cols = "phases"
     ) %>%
     dplyr::mutate(
       dplyr::across(
-        .cols = dplyr::any_of(
-          c(
-            "population_min",
-            "population_percentage_min",
-            "estimated_population_current",
-            "estimated_population_projected",
-            "estimated_population_projected2",
-            "census_population",
-            "year"
-          )
-        ),
+        .cols = dplyr::matches("population|phase"),
         .fns = as.numeric
       )
-    ) %>%
-    dplyr::rename(
-      "num" := "population",
-      "pct" := "population_percentage"
     ) %>%
     dplyr::arrange(
       dplyr::across(
@@ -130,12 +102,6 @@ clean_points_df <- function(df) {
           )
         )
       )
-    ) %>%
-    tidyr::pivot_wider(
-      names_from = "phase",
-      values_from = c("num", "pct"),
-      names_glue = "phase{phase}_{.value}",
-      values_fn = unique # errors in database have a single duplicate
     ) %>%
     dplyr::rename(
       "area_id" := "aar_id",

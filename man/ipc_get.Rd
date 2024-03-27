@@ -4,20 +4,22 @@
 \alias{ipc_get}
 \title{Get resource from IPC API}
 \usage{
-ipc_get(resource, api_key = NULL, ..., drop_metadata = FALSE)
+ipc_get(resource, return_format, pass_format, api_key = NULL, ...)
 }
 \arguments{
 \item{resource}{One of the resources exposed in the IPC API, such
 \code{"areas"} , \code{"analyses"}, \code{"points"}, or \code{"country"}.}
+
+\item{return_format}{The format that should be returned by the API. Allows
+\code{"csv"} (the default) and \code{"geojson"}.}
+
+\item{pass_format}{Pass format explicitly in the API call.}
 
 \item{api_key}{IPC API key. If \code{NULL} (the default), looks for \code{IPC_API_KEY}
 in the environment.}
 
 \item{...}{Named parameters passed to the API call URL in the form of
 \code{argument=value}.}
-
-\item{drop_metadata}{Logical, whether or not to drop metadata from the
-original list return.}
 }
 \value{
 Data frame from the API

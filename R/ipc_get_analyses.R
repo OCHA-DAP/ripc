@@ -17,8 +17,7 @@
 #' When `tidy_df` is `TRUE`, the following changes are made to the initial
 #' output to ensure each row represents a single analysis:
 #'
-#' 1. `created` and `modified` columns are converted from character columns
-#'     to date columns.
+#' 1. The data is arranged by `country`, `year`, and `created`.
 #' 2. `id` column is renamed to be `analysis_id`.
 #'
 #' @examplesIf !is.na(Sys.getenv("IPC_API_KEY", unset = NA))
@@ -48,13 +47,28 @@ ipc_get_analyses <- function(
   assert_year(year)
   type <- assert_type(type)
 
-  resource <- if (is.null(id)) "analyses" else paste(c("analysis", id), collapse = "/")
+  # different return values allowed depending on endpoint accessed
+  if (is.null(id)) {
+    resource <- "analyses"
+    return_format <- "csv"
+  } else {
+    resource <- paste(c("analysis", id), collapse = "/")
+    return_format <- "json"
+  }
+
   df <- ipc_get(
     resource = resource,
+    return_format = return_format,
+    pass_format = TRUE,
     api_key = api_key,
     year = year,
     type = type
   )
+
+  if (return_format == "json") {
+    df <- null_converter(df) %>%
+      dplyr::as_tibble()
+  }
 
   if (tidy_df) {
     clean_analyses_df(df)
@@ -68,13 +82,6 @@ ipc_get_analyses <- function(
 #' @noRd
 clean_analyses_df <- function(df) {
   df %>%
-    dplyr::mutate(
-      dplyr::across(
-        .cols = c("created", "modified"),
-        as.Date
-      ),
-      "year" := as.numeric(.data$year)
-    ) %>%
     dplyr::arrange(
       .data$country,
       .data$year,
@@ -82,5 +89,6 @@ clean_analyses_df <- function(df) {
     ) %>%
     dplyr::rename(
       "analysis_id" := "id"
-    )
+    ) %>%
+    dplyr::as_tibble()
 }
