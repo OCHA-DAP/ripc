@@ -7,6 +7,8 @@ cleaning in all `ipc_get_...()` functions.
 loading in a 
 * Improved the cleaning of `ipc_get_population()` nested JSONs to be more robust
 to changes in the API.
+* Set `R-CMD-check` GitHub Action to run weekly to check for changes to the API,
+since all function examples are re-run during the check.
 
 # ripc 0.2.1
 
