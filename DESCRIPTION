@@ -23,11 +23,13 @@ Imports:
     countrycode,
     dplyr,
     httr,
+    jsonlite,
     lifecycle,
     lubridate,
-    magrittr,
     purrr,
+    readr,
     rlang,
+    sf,
     stringr,
     tidyr
 Suggests: 

@@ -62,10 +62,6 @@ and values are stored as columns:
 \item \code{analysis_period_start} and \code{analysis_period_end} created as \code{Date} columns
 from the \code{from} and \code{to} columns respectively, allocating the day of the
 start and end periods to be the 15th of the month.
-\item \code{phases} is unnested from a list column to bring the phase data into
-the main data frame.
-\item The population estimates are pivoted to a wider format with names \code{phase#_num}
-and \code{phase#_pct}.
 \item \code{id} column is renamed to be \code{analysis_id}.
 }
 }

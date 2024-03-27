@@ -1,5 +1,13 @@
 # Development
 
+* Rstructured API calls so that `ipc_get()` is more robust by defaulting
+to requesting a CSV return from the API rather than JSON, allowing for simpler
+cleaning in all `ipc_get_...()` functions.
+* Allow `return_format` to be specified as GeoJSON for `ipc_get_areas()`, directly
+loading in a 
+* Improved the cleaning of `ipc_get_population()` nested JSONs to be more robust
+to changes in the API.
+
 # ripc 0.2.1
 
 * Improved `ipc_get_population()` to deal with missing areas data when it is

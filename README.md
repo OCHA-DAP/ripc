@@ -43,26 +43,37 @@ library(ripc)
 
 df_list <- ipc_get_population()
 df_list$country
-#> # A tibble: 674 × 24
+#> # A tibble: 761 × 29
 #>    analysis_id title       country condition analysis_date view_level ipc_period
-#>    <chr>       <chr>       <chr>   <chr>     <date>        <chr>      <chr>     
-#>  1 12166797    Acute Food… AF      A         2017-05-15    area       A         
-#>  2 12166890    Acute Food… AF      A         2017-09-15    area       A         
-#>  3 12527589    Acute Food… AF      A         2018-01-15    area       A         
-#>  4 12856213    Acute Food… AF      A         2018-09-15    area       A         
-#>  5 12856213    Acute Food… AF      A         2018-09-15    area       A         
-#>  6 13928767    Acute Food… AF      A         2019-09-15    area       A         
-#>  7 13928767    Acute Food… AF      A         2019-09-15    area       A         
-#>  8 15731853    Acute Food… AF      A         2020-04-15    area       A         
-#>  9 15731853    Acute Food… AF      A         2020-04-15    area       A         
-#> 10 18978466    Acute Food… AF      A         2020-09-15    area       A         
-#> # ℹ 664 more rows
-#> # ℹ 17 more variables: period <chr>, period_dates <chr>, phase3pl_num <int>,
-#> #   phase3pl_pct <dbl>, estimated_population <int>, phase1_num <int>,
-#> #   phase1_pct <dbl>, phase2_num <int>, phase2_pct <dbl>, phase3_num <int>,
-#> #   phase3_pct <dbl>, phase4_num <int>, phase4_pct <dbl>, phase5_num <int>,
-#> #   phase5_pct <dbl>, analysis_period_start <date>, analysis_period_end <date>
+#>          <dbl> <chr>       <chr>   <chr>     <chr>         <chr>      <chr>     
+#>  1    65508276 Acute Food… HT      A         Mar 2024      area       A         
+#>  2    65115079 Acute Food… PS      A         Feb 2024      area       C         
+#>  3    65115079 Acute Food… PS      A         Feb 2024      area       C         
+#>  4    65113995 Acute Food… KE      A         Feb 2024      area       A         
+#>  5    65113995 Acute Food… KE      A         Feb 2024      area       A         
+#>  6    65024769 Acute Food… SO      A         Jan 2024      area       A         
+#>  7    65024769 Acute Food… SO      A         Jan 2024      area       A         
+#>  8    64948217 Acute Food… MG      A         Dec 2023      area       A         
+#>  9    64948217 Acute Food… MG      A         Dec 2023      area       A         
+#> 10    64948217 Acute Food… MG      A         Dec 2023      area       A         
+#> # ℹ 751 more rows
+#> # ℹ 22 more variables: population <dbl>, population_percentage <chr>,
+#> #   period <chr>, from <chr>, to <chr>, analysis_period_start <date>,
+#> #   analysis_period_end <date>, p3plus <dbl>, p3plus_percentage <dbl>,
+#> #   estimated_population <dbl>, phase1_population <dbl>,
+#> #   phase1_percentage <dbl>, phase2_population <dbl>, phase2_percentage <dbl>,
+#> #   phase3_population <dbl>, phase3_percentage <dbl>, …
 ```
+
+While the default is to return data frames to the user, you can directly
+access GeoJSON files from the IPC API.
+
+``` r
+df_areas <- ipc_get_areas(id = 12856213, period = "P", return_format = "geojson")
+plot(df_areas[,"overall_phase"])
+```
+
+<img src="man/figures/README-geojson-1.png" width="100%" />
 
 More details on the API are available below.
 
