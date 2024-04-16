@@ -71,7 +71,7 @@ ipc_get <- function(
     )
 
     if (return_format == "csv") {
-      return(readr::read_csv(ret, show_col_types = FALSE))
+      return(readr::read_csv(ret, show_col_types = FALSE, na = ""))
     } else if (return_format == "geojson") {
       return(sf::st_read(ret, quiet = TRUE))
     } else if (return_format == "json") {
