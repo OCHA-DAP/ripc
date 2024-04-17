@@ -94,9 +94,7 @@ ipc_get_population <- function(
     end = end
   )
 
-  if (!all(sapply(ret, inherits, what = "list"))) {
-    ret <- list(ret)
-  }
+  ret <- ensure_list(ret)
 
   df_base <- create_base_df(ret)
   df_groups <- create_groups_df(df_base)
@@ -104,8 +102,8 @@ ipc_get_population <- function(
   df_country <- dplyr::select(df_base, -dplyr::any_of(c("groups", "areas")))
 
   list(
-    country = reconvert_df(df_country),
-    groups = reconvert_df(df_groups),
-    areas = reconvert_df(df_areas)
+    country = df_country,
+    groups = df_groups,
+    areas = df_areas
   )
 }

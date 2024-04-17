@@ -4,7 +4,7 @@
 to requesting a CSV return from the API rather than JSON, allowing for simpler
 cleaning in all `ipc_get_...()` functions.
 * Allow `return_format` to be specified as GeoJSON for `ipc_get_areas()`, directly
-loading in a 
+loading in an `sf` object.
 * Improved the cleaning of `ipc_get_population()` nested JSONs to be more robust
 to changes in the API.
 * Set `R-CMD-check` GitHub Action to run weekly to check for changes to the API,

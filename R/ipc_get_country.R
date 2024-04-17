@@ -89,8 +89,7 @@ clean_country_df <- function(df) {
             "country",
             "year",
             "analysis_period_start",
-            "title",
-            "phase"
+            "title"
           )
         )
       )

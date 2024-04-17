@@ -70,13 +70,12 @@ ipc_get <- function(
       encoding = "UTF-8"
     )
 
-    if (return_format == "csv") {
-      return(readr::read_csv(ret, show_col_types = FALSE, na = ""))
-    } else if (return_format == "geojson") {
-      return(sf::st_read(ret, quiet = TRUE))
-    } else if (return_format == "json") {
-      return(jsonlite::fromJSON(ret))
-    }
+    switch(
+      return_format,
+      "csv" = readr::read_csv(ret, show_col_types = FALSE, na = ""),
+      "geojson" = sf::st_read(ret, quiet = TRUE),
+      "json" = jsonlite::fromJSON(ret)
+    )
 }
 
 #' Get IPC API key
