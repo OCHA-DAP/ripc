@@ -68,10 +68,7 @@ When \code{tidy_df} is \code{TRUE}, the following changes are made to the initia
 output to ensure each row represents a single point analysis, and all estimates
 and values are stored as columns:
 \enumerate{
-\item \code{phases} is unnested from a list column to bring the phase data into the
-main data frame.
-\item The population estimates are pivoted to a wider format with names \code{phase#_num}
-and \code{phase#_pct}.
+\item All columns containing \code{phase} or \code{population} are converted to numeric.
 \item \code{aar_id} is renamed to \code{area_id} and \code{anl_id} to \code{analysis_id}.
 }
 }

@@ -5,27 +5,33 @@
 #'
 #' @param resource One of the resources exposed in the IPC API, such
 #'     `"areas"` , `"analyses"`, `"points"`, or `"country"`.
+#' @param return_format The format that should be returned by the API. Allows
+#'     `"csv"` (the default) and `"geojson"`.
+#' @param pass_format Pass format explicitly in the API call.
 #' @param api_key IPC API key. If `NULL` (the default), looks for `IPC_API_KEY`
 #'     in the environment.
 #' @param ... Named parameters passed to the API call URL in the form of
 #'     `argument=value`.
-#' @param drop_metadata Logical, whether or not to drop metadata from the
-#'     original list return.
 #'
 #' @importFrom httr GET
 #' @return Data frame from the API
 ipc_get <- function(
     resource,
+    return_format,
+    pass_format,
     api_key = NULL,
-    ...,
-    drop_metadata = FALSE
+    ...
   ) {
     api_key <- get_api_key(api_key)
 
     # get parameters from ellipsis, removing nulls for string concatenation
     args <- list(...)
     args <- args[!sapply(args, is.null)]
-    params <- paste(names(args), args, sep = "=", collapse = "&") # get params
+    if (pass_format) {
+      params <- paste(c("format", names(args)), c(return_format, args), sep = "=", collapse = "&") # get params
+    } else {
+      params <- paste(names(args), args, sep = "=", collapse = "&")
+    }
 
     # pull together into IPC URL format
     url <- sprintf(
@@ -43,35 +49,32 @@ ipc_get <- function(
       )
     }
 
-    ipc_list <- httr::content(
-      x = resp,
-      as = "parsed",
-      type = "application/json"
-    )
+    # check that the expected return value is correct
+    expected_format <- ifelse(return_format == "csv", "text/csv", "application/json")
+    resp_format <- httr::headers(resp)$`content-type`
 
-    # check if list of lists or if not, convert to a list of single list
-    if (!all(sapply(ipc_list, inherits, what = "list"))) {
-      ipc_list <- list(ipc_list)
-    }
-
-    if (purrr::is_empty(ipc_list)) {
+    if (resp_format != expected_format) {
       stop(
-        "API call was successful but no content was returned. Check that the ",
-        "ID or other parameters passed are actually present in the resource.",
+        "API returned '",
+        resp_format,
+        "'not the expected '",
+        expected_format,
+        "'. Check the API and consider raising an issue on the {ripc} GitHub.",
         call. = FALSE
       )
     }
 
-    purrr::map_dfr(
-      .x = ipc_list,
-      .f = ~ null_converter(.x, drop_metadata = drop_metadata) %>%
-        dplyr::as_tibble() %>%
-        dplyr::mutate(
-          dplyr::across(
-            .cols = dplyr::everything(),
-            .fns = ~ if (is.numeric(.x)) as.character(.x) else .x
-          )
-        )
+    ret <- httr::content(
+      x = resp,
+      as = "text",
+      encoding = "UTF-8"
+    )
+
+    switch(
+      return_format,
+      "csv" = readr::read_csv(ret, show_col_types = FALSE, na = ""),
+      "geojson" = sf::st_read(ret, quiet = TRUE),
+      "json" = jsonlite::fromJSON(ret)
     )
 }
 
@@ -92,26 +95,4 @@ get_api_key <- function(api_key) {
     }
   }
   api_key
-}
-
-#' Convert NULL values in list to NA
-#'
-#' Used since NULL values generate errors when converting to data frame.
-#' Drops metadata from lists if requested, used in [ipc_get_population()].
-#'
-#' @noRd
-null_converter <- function(x, drop_metadata = FALSE) {
-  if (is.list(x)) {
-    if (drop_metadata) {
-      x[["metadata"]] <- NULL
-    }
-    lapply(x, null_converter)
-  }
-  else {
-    if (is.null(x)) {
-      NA
-    } else {
-      x
-    }
-  }
 }

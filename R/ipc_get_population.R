@@ -59,8 +59,9 @@
 #' ipc_get_population()
 #'
 #' # get populations for specific analysis ID from advanced API
-#' ipc_get_population(id = 12856213)
-#'
+#' ipc_get_population(id = 12856213) # analysis with areas data frame
+#' ipc_get_population(id = 65508276) # analysis with groups data frame
+
 #' @returns A list of 3 data frames:
 #' * Country data frame.
 #' * Areas data frame.
@@ -83,278 +84,26 @@ ipc_get_population <- function(
   assert_start_end(start, end)
   assert_id(id, country, start, end)
 
-  df <- ipc_get(
+  ret <- ipc_get(
     resource = paste(c("population", id), collapse = "/"),
+    return_format = "json",
+    pass_format = FALSE,
     api_key = api_key,
     country = country,
     start = start,
-    end = end,
-    drop_metadata = TRUE
+    end = end
   )
 
-  if (tidy_df) {
-    clean_population_df(df)
-  } else {
-    df
-  }
-}
+  ret <- ensure_list(ret)
 
-#' Convert phases list to data frame.
-#'
-#' Cleans up the phases list to allow unnesting. Drops the `overall_phase`
-#' column, then converts to data frame.
-#'
-#' @param phases_list Phases list
-#'
-#' @noRd
-point_phases_as_df <- function(phases_list) {
-  phases_list[["overall_phase"]] <- NULL
-  dplyr::as_tibble(phases_list)
-}
-
-
-#' Clean population data frame
-#'
-#' @noRd
-clean_population_df <- function(df) {
-  # rename for all sub-data frames
-  # only needed to do once
-  renamed_df <- rename_population_df(df) %>%
-    dplyr::rename("analysis_id" := "id") %>%
-    dplyr::rename_with(
-      .cols = dplyr::ends_with("period_dates"),
-      .f = ~ paste0(
-        "period_dates_",
-        stringr::str_remove(.x, "_period_dates")
-      )
-    )
-
-  # get the country data frame
-  country_df <- renamed_df %>%
-    pivot_population_df() %>%
-    create_date_columns() %>%
-    dplyr::select(
-      -dplyr::any_of(
-        c("groups", "areas")
-      )
-    ) %>%
-    dplyr::distinct() %>%
-    dplyr::mutate(
-      dplyr::across(
-        .cols = c(
-          dplyr::starts_with("phase"),
-          "estimated_population"
-        ),
-        .fns = as.numeric
-      )
-    ) %>%
-    arrange_population_df()
-
-  # extract groups data frame
-  if ("groups" %in% names(renamed_df) && !all(is.na(renamed_df$groups))) {
-    renamed_groups_df <- renamed_df %>%
-      dplyr::filter(
-        !sapply(.data$groups, is.null)
-      ) %>%
-      dplyr::select(
-        -c(dplyr::any_of("areas"), dplyr::matches("^phase|^estimated"))
-      ) %>%
-      dplyr::mutate(
-        "groups" := purrr::map(.data$groups, dplyr::as_tibble)
-      ) %>%
-      tidyr::unnest(
-        cols = "groups"
-      ) %>%
-      rename_population_df() %>%
-      dplyr::rename(
-        "group_id" := "id",
-        "group_name" := "name"
-      )
-
-    groups_df <- renamed_groups_df %>%
-      dplyr::select(-dplyr::any_of("areas")) %>%
-      dplyr::distinct() %>%
-      pivot_population_df() %>%
-      dplyr::filter(.data$period_dates != "") %>%
-      create_date_columns() %>%
-      arrange_population_df()
-  } else {
-    groups_df <- NULL
-  }
-
-  # extract areas data frame
-  # have to do in two stages, extracting areas that don't have groups
-  # then extracting again from areas under groups
-  if ("areas" %in% names(renamed_df) && !all(is.na(renamed_df$areas))) {
-    renamed_areas_df1 <- renamed_df %>%
-      dplyr::filter(
-        !sapply(.data$areas, is.null)
-      ) %>%
-      dplyr::select(
-        -c(dplyr::any_of("groups"), dplyr::matches("^phase|^estimated"))
-      ) %>%
-      dplyr::mutate(
-        "areas" := purrr::map(.data$areas, dplyr::as_tibble)
-      ) %>%
-      tidyr::unnest(
-        cols = "areas"
-      ) %>%
-      rename_population_df()
-  } else {
-    renamed_areas_df1 <- NULL
-  }
-
-
-  # now extract areas that are under groups
-  if ("groups" %in% names(renamed_df) && "areas" %in% names(renamed_df) && !all(is.na(renamed_df$areas))) {
-    renamed_areas_df2 <- renamed_groups_df %>%
-      dplyr::filter(
-        !sapply(.data$areas, is.null)
-      ) %>%
-      dplyr::mutate(
-        "areas" := purrr::map(.data$areas, dplyr::as_tibble)
-      ) %>%
-      dplyr::select(
-        -c(dplyr::matches("^phase|^estimated"))
-      ) %>%
-      tidyr::unnest(
-        cols = "areas"
-      ) %>%
-      rename_population_df()
-  } else {
-    renamed_areas_df2 <- NULL
-  }
-
-
-  # now combine into a single areas dataset
-  # TODO: remove `-dplyr::starts_with("group")` once
-  # the IPC team fixes the API, currently it duplicates
-  # all areas in a country for each group
-  if (!all(c(is.null(renamed_areas_df1), is.null(renamed_areas_df2)))) {
-    areas_df <- dplyr::bind_rows(renamed_areas_df1, renamed_areas_df2) %>%
-      pivot_population_df() %>%
-      dplyr::filter(
-        .data$period_dates != ""
-      ) %>%
-      create_date_columns() %>%
-      dplyr::distinct(
-        dplyr::across(
-          -dplyr::starts_with("group") # TODO: remove once API is fixed
-        )
-      ) %>%
-      dplyr::rename(
-        "area_id" := "id",
-        "area_name" := "name"
-      ) %>%
-      arrange_population_df()
-  } else {
-    areas_df <- NULL
-  }
-
-
+  df_base <- create_base_df(ret)
+  df_groups <- create_groups_df(df_base)
+  df_areas <- create_areas_df(df_base, df_groups)
+  df_country <- dplyr::select(df_base, -dplyr::any_of(c("groups", "areas")))
 
   list(
-    "country" = country_df,
-    "groups" = groups_df,
-    "areas" = areas_df
+    country = df_country,
+    groups = df_groups,
+    areas = df_areas
   )
-}
-
-#' Rename the population data frame
-#'
-#' Lots of renaming that needs to be done to ensure that the file is
-#' able to be pivoted longer and then wider into a tidy format. Useful for
-#' all levels of population data.
-#'
-#' @noRd
-rename_population_df <- function(df) {
-  df %>%
-    dplyr::select(
-      -dplyr::any_of(
-        c(
-          "period",
-          "population",
-          "population_percentage"
-        )
-      )
-    ) %>%
-    dplyr::rename_with(
-      .cols = dplyr::everything(),
-      .f = ~ stringr::str_replace_all(
-        .x,
-        c(
-          "p3plus(?!_percentage|_number)" = "p3plus_population",
-          "percentage" = "pct",
-          "(?<!estimated)_population(?=$|_)" = "_num",
-          "p3plus" = "phase3pl"
-        )
-      )
-    ) %>%
-    dplyr::rename_with(
-      .cols = dplyr::matches("_pct$|_num$|_population$|overall_phase$"),
-      .f = ~ paste0(.x, "_current")
-    )
-}
-
-#' Pivot population data frame
-#'
-#' @noRd
-pivot_population_df <- function(df) {
-  df %>%
-    tidyr::pivot_longer(
-      cols = dplyr::matches("_projected$|_current$"),
-      names_to = c(".value", "period"),
-      names_pattern = "(.*)_(current|second_projected|(?<!second_)projected)"
-    ) %>%
-    dplyr::filter(
-      !is.na(.data$phase2_num) # drops rows for periods that are missing
-    )
-}
-
-#' Create new columns for dates
-#'
-#' Extracts new columns from `period_dates` for start and end of the period, while
-#' ensuring that the `analysis_date` is converted to a date.
-#'
-#' @noRd
-create_date_columns <- function(df) {
-  df$analysis_date <- lubridate::dmy(paste("15", df$analysis_date))
-
-  # only create next columns when dates exist
-  # to avoid creation of warnings
-  has_dates <- !is.na(df$period_dates) & df$period_dates != ""
-  df[has_dates, "analysis_period_start"] <- lubridate::floor_date(
-    x = lubridate::dmy(
-      paste("15", stringr::str_extract(df$period_dates[has_dates], "^(.*) -"))
-    ),
-    unit = "month"
-  )
-
-  df[has_dates, "analysis_period_end"] <- lubridate::ceiling_date(
-    x = lubridate::dmy(
-      paste("15", stringr::str_extract(df$period_dates[has_dates], "- (.*)$"))
-    ),
-    unit = "month"
-  ) - lubridate::days(1)
-
-  df
-}
-
-#' Arrange population data frames
-#'
-#' @noRd
-arrange_population_df <- function(df) {
-  df %>%
-    dplyr::arrange(
-      dplyr::across(
-        dplyr::any_of(
-          c(
-            "country",
-            "groups_id",
-            "areas_id",
-            "analysis_period_start"
-          )
-        )
-      )
-    )
 }

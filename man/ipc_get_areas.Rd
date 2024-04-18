@@ -10,6 +10,7 @@ ipc_get_areas(
   type = NULL,
   id = NULL,
   period = NULL,
+  return_format = c("csv", "geojson"),
   api_key = NULL,
   tidy_df = TRUE
 )
@@ -29,6 +30,9 @@ data for all types.}
 
 \item{period}{Period code, either 'C', 'P', or 'A' for current, projection,
 and second projection.}
+
+\item{return_format}{The format that should be returned by the API. Allows
+\code{"csv"} (the default) and \code{"geojson"}.}
 
 \item{api_key}{IPC API key. If \code{NULL} (the default), looks for \code{IPC_API_KEY}
 in the environment.}
@@ -54,8 +58,7 @@ pass in \code{id} and \code{period}. You cannot pass in both sets of parameters.
 Areas data is the typical unit of analysis in IPC-CH outputs. These are
 typically administrative units (or clusters of them together). For each area,
 estimates of the population in each phase is provided and a general phase
-classification is assigned. Data is currently output only for current
-periods through \strong{areas} endpoint. Use \code{\link[=ipc_get_population]{ipc_get_population()}} to get
+classification is assigned. Use \code{\link[=ipc_get_population]{ipc_get_population()}} to get
 detailed population data and classifications for all analysis periods.
 
 See the \href{https://www.ipcinfo.org}{IPC website} and
@@ -70,12 +73,10 @@ and values are stored as columns:
 \item \code{analysis_period_start} and \code{analysis_period_end} created as \code{Date} columns
 from the \code{from} and \code{to} columns respectively, allocating the day of the
 start and end periods to be the 15th of the month.
-\item \code{phases} is unnested from a list column to bring the phase data into
-the main data frame.
-\item The population estimates are pivoted to a wider format with names \code{phase#_num}
-and \code{phase#_pct}.
 \item \code{title} column is renamed to be \code{area_name}, \code{anl_id} to \code{analysis_id},
 and \code{id} and \code{aar_id} are changed to \code{area_id}.
+\item Duplicated rows are removed from the data frame if the return value is CSV,
+because the duplicates are there due to polygon geometries.
 }
 }
 
@@ -86,5 +87,8 @@ ipc_get_areas()
 
 # get areas for specific analysis ID and period from advanced API
 ipc_get_areas(id = 12856213, period = "P")
+
+# request GeoJSON return
+ipc_get_areas(id = 12856213, period = "P", return_format = "geojson")
 \dontshow{\}) # examplesIf}
 }

@@ -10,8 +10,7 @@
 #' Areas data is the typical unit of analysis in IPC-CH outputs. These are
 #' typically administrative units (or clusters of them together). For each area,
 #' estimates of the population in each phase is provided and a general phase
-#' classification is assigned. Data is currently output only for current
-#' periods through **areas** endpoint. Use [ipc_get_population()] to get
+#' classification is assigned. Use [ipc_get_population()] to get
 #' detailed population data and classifications for all analysis periods.
 #'
 #' See the [IPC website](https://www.ipcinfo.org) and
@@ -23,14 +22,12 @@
 #' and values are stored as columns:
 #'
 #' 1. `analysis_period_start` and `analysis_period_end` created as `Date` columns
-#'     from the `from` and `to` columns respectively, allocating the day of the
-#'     start and end periods to be the 15th of the month.
-#' 2. `phases` is unnested from a list column to bring the phase data into
-#'     the main data frame.
-#' 3. The population estimates are pivoted to a wider format with names `phase#_num`
-#'     and `phase#_pct`.
-#' 4. `title` column is renamed to be `area_name`, `anl_id` to `analysis_id`,
-#'     and `id` and `aar_id` are changed to `area_id`.
+#'    from the `from` and `to` columns respectively, allocating the day of the
+#'    start and end periods to be the 15th of the month.
+#' 2. `title` column is renamed to be `area_name`, `anl_id` to `analysis_id`,
+#'    and `id` and `aar_id` are changed to `area_id`.
+#' 3. Duplicated rows are removed from the data frame if the return value is CSV,
+#'    because the duplicates are there due to polygon geometries.
 #'
 #' @param country ISO2 country code.
 #' @param year Single numeric year to filter analysis, calculated from the
@@ -55,6 +52,9 @@
 #' # get areas for specific analysis ID and period from advanced API
 #' ipc_get_areas(id = 12856213, period = "P")
 #'
+#' # request GeoJSON return
+#' ipc_get_areas(id = 12856213, period = "P", return_format = "geojson")
+#'
 #' @returns
 #' Data frame of IPC and CH analysis at the areas level. Refer to the
 #' [IPC-CH Public API documentation](https://docs.api.ipcinfo.org) for details
@@ -68,9 +68,11 @@ ipc_get_areas <- function(
     type = NULL,
     id = NULL,
     period = NULL,
+    return_format = c("csv", "geojson"),
     api_key = NULL,
     tidy_df = TRUE
   ) {
+  return_format <- rlang::arg_match(return_format)
   assert_id_period(id, period, country, year)
   assert_country(country)
   assert_year(year)
@@ -81,88 +83,51 @@ ipc_get_areas <- function(
 
   df <- ipc_get(
     resource = paste(c("areas", id, period), collapse = "/"),
+    return_format = return_format,
+    pass_format = TRUE,
     api_key = api_key,
+    country = country,
     year = year,
     type = type
   )
 
   if (tidy_df) {
-    clean_areas_df(df)
-  } else {
-    df
+    df <- clean_areas_df(df = df, return_format = return_format)
   }
-}
 
-#' Convert areas phase list to data frame.
-#'
-#' Cleans up the phases list to allow unnesting. Drops the `color`
-#' column, then converts to data frame.
-#'
-#' @param phases_list Phases list
-#'
-#' @noRd
-area_phases_as_df <- function(phases_list) {
-  phases_list[["color"]] <- NULL
-  dplyr::as_tibble(phases_list) %>%
-    dplyr::rename(
-      "num" := "population",
-      "pct" := "percent"
-    )
+  df
 }
 
 #' Clean areas data frame
 #'
-#' Unpacks phases data from list column into regular column. Then ensures data
-#' is put into a wide format.
+#' Runs `dplyr::distinct()` on the data as there is a duplicate row in the database,
+#' and renames a few columns.
 #'
 #' @noRd
-clean_areas_df <- function(df) {
-  # clean up output
-  # generate analysis period start and end if present
+clean_areas_df <- function(df, return_format) {
+  # only deduplicate if CSV is returned, as the duplication is due to polygon geometries
+  if (return_format == "csv") {
+    df <- dplyr::distinct(df)
+    df <- dplyr::as_tibble(df)
+  }
+
+  df <- dplyr::rename(
+      df,
+      "area_name" := "title",
+      "analysis_id" := "anl_id"
+  )
+
+  df <- dplyr::rename_with(
+    df,
+    .cols = dplyr::any_of(c("id", "aar_id")),
+    .fn = ~ "area_id"
+  )
 
   df <- extract_dates(
-    df = df,
+    df,
     from_col = "from",
     to_col = "to"
   )
 
-  # unpack values from phases
-
-  clean_df <- df %>%
-    dplyr::mutate(
-      "phases" := purrr::map(.x = .data$phases, .f = area_phases_as_df),
-      "overall_phase" := as.numeric(.data$overall_phase)
-    )%>%
-    tidyr::unnest(
-      cols = "phases"
-    ) %>%
-    dplyr::arrange(
-      dplyr::across(
-        dplyr::any_of(
-          c(
-            "country",
-            "year",
-            "analysis_period_start",
-            "title",
-            "phase"
-          )
-        )
-      )
-    ) %>%
-    tidyr::pivot_wider(
-      names_from = "phase",
-      values_from = c("num", "pct"),
-      names_glue = "phase{phase}_{.value}",
-      values_fn = unique # errors in database have a single duplicate
-    )
-
-  dplyr::rename(
-    clean_df,
-    "area_name" := "title",
-    "analysis_id" := "anl_id"
-  ) %>%
-    dplyr::rename_with(
-      .cols = dplyr::any_of(c("id", "aar_id")),
-      .fn = ~ "area_id"
-    )
+  df
 }

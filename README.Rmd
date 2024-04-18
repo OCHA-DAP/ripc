@@ -54,6 +54,14 @@ df_list <- ipc_get_population()
 df_list$country
 ```
 
+While the default is to return data frames to the user, you can directly access
+GeoJSON files from the IPC API.
+
+```{r geojson}
+df_areas <- ipc_get_areas(id = 12856213, period = "P", return_format = "geojson")
+plot(df_areas[,"overall_phase"])
+```
+
 More details on the API are available below.
 
 ## IPC API

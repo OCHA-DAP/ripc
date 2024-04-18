@@ -26,11 +26,7 @@
 #' 1. `analysis_period_start` and `analysis_period_end` created as `Date` columns
 #'     from the `from` and `to` columns respectively, allocating the day of the
 #'     start and end periods to be the 15th of the month.
-#' 2. `phases` is unnested from a list column to bring the phase data into
-#'     the main data frame.
-#' 3. The population estimates are pivoted to a wider format with names `phase#_num`
-#'     and `phase#_pct`.
-#' 4. `id` column is renamed to be `analysis_id`.
+#' 2. `id` column is renamed to be `analysis_id`.
 #'
 #' @examplesIf !is.na(Sys.getenv("IPC_API_KEY", unset = NA))
 #' # get all areas from the simplified API
@@ -59,6 +55,8 @@ ipc_get_country <- function(
 
   df <- ipc_get(
     resource = "country",
+    return_format = "csv",
+    pass_format = TRUE,
     api_key = api_key,
     country = country,
     year = year,
@@ -72,47 +70,15 @@ ipc_get_country <- function(
   }
 }
 
-#' Convert phases list to data frame.
-#'
-#' Cleans up the phases list to allow unnesting. Drops the `overall_phase`
-#' column, then converts to data frame.
-#'
-#' @param phases_list Phases list
-#'
-#' @noRd
-country_phases_as_df <- function(phases_list) {
-  phases_list[["overall_phase"]] <- NULL
-  dplyr::as_tibble(phases_list) %>%
-    dplyr::rename(
-      "num" := "population",
-      "pct" := "percentage"
-    )
-}
-
-
 #' Clean areas data frame
 #'
 #' @noRd
 clean_country_df <- function(df) {
-  # clean up output
-  # generate analysis period start and end if present
-
-  df <- extract_dates(
+  extract_dates(
     df = df,
     from_col = "from",
     to_col = "to"
-  )
-
-  # unpack values from phases
-
-  df %>%
-    dplyr::mutate(
-      "phases" := purrr::map(.x = .data$phases, .f = country_phases_as_df),
-      "population" := as.numeric(.data$population)
-    )%>%
-    tidyr::unnest(
-      cols = "phases"
-    ) %>%
+  ) %>%
     dplyr::rename(
       "analysis_id" := "id"
     ) %>%
@@ -123,16 +89,10 @@ clean_country_df <- function(df) {
             "country",
             "year",
             "analysis_period_start",
-            "title",
-            "phase"
+            "title"
           )
         )
       )
     ) %>%
-    tidyr::pivot_wider(
-      names_from = "phase",
-      values_from = c("num", "pct"),
-      names_glue = "phase{phase}_{.value}",
-      values_fn = unique # errors in database have a single duplicate
-    )
+    dplyr::as_tibble()
 }

@@ -50,6 +50,8 @@ ipc_get_icons <- function(
   type <- assert_type(type)
 
   df <- ipc_get(
+    return_format = "json",
+    pass_format = FALSE,
     resource = paste(c("icons", id, period), collapse = "/"),
     api_key = api_key,
     year = year,
@@ -71,8 +73,9 @@ clean_icons_df <- function(df) {
     dplyr::rename(
       "area_id" := "aar_id",
       "area_name" := "area"
-    ) |>
+    ) %>%
     dplyr::mutate(
       "year" := as.numeric(.data$year)
-    )
+    ) %>%
+    dplyr::as_tibble()
 }

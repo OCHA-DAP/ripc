@@ -103,6 +103,7 @@ single data frame.
 ipc_get_population()
 
 # get populations for specific analysis ID from advanced API
-ipc_get_population(id = 12856213)
+ipc_get_population(id = 12856213) # analysis with areas data frame
+ipc_get_population(id = 65508276) # analysis with groups data frame
 \dontshow{\}) # examplesIf}
 }
