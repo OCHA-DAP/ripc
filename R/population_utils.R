@@ -14,7 +14,9 @@ pivot_population_df <- function(df) {
   )
 
   df_wide <- tidyr::pivot_wider(
-    df_long
+    df_long,
+    names_from = "name",
+    values_from = "value"
   )
 
   dplyr::filter(
