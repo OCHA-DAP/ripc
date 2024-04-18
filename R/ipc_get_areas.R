@@ -53,7 +53,7 @@
 #' ipc_get_areas(id = 12856213, period = "P")
 #'
 #' # request GeoJSON return
-#' ipc_get_areas(id = 12856213, period = "P", return_format = "geojson)
+#' ipc_get_areas(id = 12856213, period = "P", return_format = "geojson")
 #'
 #' @returns
 #' Data frame of IPC and CH analysis at the areas level. Refer to the

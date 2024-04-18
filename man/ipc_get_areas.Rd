@@ -80,3 +80,15 @@ because the duplicates are there due to polygon geometries.
 }
 }
 
+\examples{
+\dontshow{if (!is.na(Sys.getenv("IPC_API_KEY", unset = NA))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# get all areas from the simplified API
+ipc_get_areas()
+
+# get areas for specific analysis ID and period from advanced API
+ipc_get_areas(id = 12856213, period = "P")
+
+# request GeoJSON return
+ipc_get_areas(id = 12856213, period = "P", return_format = "geojson")
+\dontshow{\}) # examplesIf}
+}
