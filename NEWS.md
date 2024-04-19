@@ -1,4 +1,4 @@
-# Development
+# ripc 0.3.0
 
 * Rstructured API calls so that `ipc_get()` is more robust by defaulting
 to requesting a CSV return from the API rather than JSON, allowing for simpler
