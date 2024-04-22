@@ -1,6 +1,6 @@
 # ripc 0.3.0
 
-* Rstructured API calls so that `ipc_get()` is more robust by defaulting
+* Restructured API calls so that `ipc_get()` is more robust by defaulting
 to requesting a CSV return from the API rather than JSON, allowing for simpler
 cleaning in all `ipc_get_...()` functions.
 * Allow `return_format` to be specified as GeoJSON for `ipc_get_areas()`, directly
