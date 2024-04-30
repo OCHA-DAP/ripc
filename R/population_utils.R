@@ -90,7 +90,8 @@ type_convert_silent <- function(df) {
   if (is.data.frame(df)) {
     df <- suppressMessages(
       readr::type_convert(
-        df = df
+        df = df,
+        na = ""
       )
     )
   }

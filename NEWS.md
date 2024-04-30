@@ -1,3 +1,8 @@
+# Development
+
+* Fixed `type_convert_silent()` to parse `NA` strings as characters, not explicit
+missing values.
+
 # ripc 0.3.0
 
 * Restructured API calls so that `ipc_get()` is more robust by defaulting
