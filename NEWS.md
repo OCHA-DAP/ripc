@@ -1,4 +1,4 @@
-# Development
+# ripc 0.3.1
 
 * Fixed `type_convert_silent()` to parse `NA` strings as characters, not explicit
 missing values.
