@@ -61,6 +61,7 @@ ipc_get_analyses <- function(
     return_format = return_format,
     pass_format = TRUE,
     api_key = api_key,
+    country = country,
     year = year,
     type = type
   )
