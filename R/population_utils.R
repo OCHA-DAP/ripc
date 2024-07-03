@@ -14,7 +14,7 @@ pivot_population_df <- function(df) {
   )
 
   df_wide <- tidyr::pivot_wider(
-    df_long,
+    dplyr::distinct(df_long),
     names_from = "name",
     values_from = "value"
   )
@@ -47,7 +47,7 @@ rename_estimate_columns <- function(df) {
           )
         )
       },
-      .cols = dplyr::matches("p[0-9]{1}|^phase|^estimated")
+      .cols = dplyr::matches("p[0-9]{1}|^overall_phase|^phase|^estimated")
     )
 }
 
@@ -60,7 +60,7 @@ rename_estimate_columns <- function(df) {
 drop_estimate_columns <- function(df) {
   dplyr::select(
     .data = df,
-    -dplyr::matches("p[0-9]{1}|^phase|^estimated")
+    -dplyr::matches("p[0-9]{1}|^overall_phase|^phase|^estimated")
   )
 }
 

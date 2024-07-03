@@ -1,3 +1,7 @@
+# ripc (development version)
+
+* Fixed `ipc_get_population()` outputs for the `groups` and `areas` data frames.
+
 # ripc 0.3.1
 
 * Fixed `type_convert_silent()` to parse `NA` strings as characters, not explicit

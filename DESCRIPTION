@@ -1,6 +1,6 @@
 Package: ripc
 Title: Download and Tidy IPC and CH Data
-Version: 0.3.1
+Version: 0.3.1.9000
 Authors@R: 
     person(
       given = "Seth",

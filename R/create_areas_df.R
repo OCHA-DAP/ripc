@@ -55,8 +55,21 @@ wrangle_areas_source_df <- function(df) {
     )
   }
 
+  date_cols <- c("from", "to", "analysis_period_start", "analysis_period_end")
+
+  # pivot without the date columns
   df_areas <- rename_areas_df(df_areas)
-  df_areas <- pivot_population_df(df_areas)
+  df_pivoted <- pivot_population_df(
+    dplyr::select(df_areas, -dplyr::any_of(c("period", date_cols)))
+  )
+
+  df_dates <- dplyr::select(df_areas, dplyr::any_of(c("analysis_id", "period", date_cols)))
+
+  dplyr::left_join(
+    df_pivoted,
+    dplyr::distinct(df_dates),
+    by = c("analysis_id", "period")
+  )
 }
 
 #' Renames the areas columns
@@ -76,11 +89,6 @@ rename_areas_df <- function(df) {
 
   dplyr::select(
     df,
-    -dplyr::any_of(
-      c(
-        "aag_id",
-        "period"
-      )
-    )
+    -dplyr::any_of("aag_id")
   )
 }
