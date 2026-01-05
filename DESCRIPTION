@@ -1,11 +1,11 @@
 Package: ripc
 Title: Download and Tidy IPC and CH Data
-Version: 1.0.0
+Version: 0.3.2
 Authors@R: 
     person(
-      given = "Seth",
-      family = "Caldwell", 
-      email = "caldwellst@gmail.com",
+      given = "Giulia",
+      family = "Martini", 
+      email = "giulia.martini@un.org",
       role = c("aut", "cre", "cph")
     )
 Description: Utilities to access Integrated Food Security Phase Classification
