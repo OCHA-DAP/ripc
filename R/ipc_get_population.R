@@ -107,3 +107,4 @@ ipc_get_population <- function(
     areas = df_areas
   )
 }
+

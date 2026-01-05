@@ -50,7 +50,7 @@ ipc_get <- function(
     }
 
     # check that the expected return value is correct
-    expected_format <- ifelse(return_format == "csv", "text/csv", "application/json")
+    expected_format <- ifelse(return_format == "csv", "text/csv", "application/json; charset=utf-8")
     resp_format <- httr::headers(resp)$`content-type`
 
     if (resp_format != expected_format) {
