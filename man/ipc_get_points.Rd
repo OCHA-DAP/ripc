@@ -74,12 +74,12 @@ and values are stored as columns:
 }
 
 \examples{
-\dontshow{if (!is.na(Sys.getenv("IPC_API_KEY", unset = NA))) withAutoprint(\{ # examplesIf}
+\dontrun{
 
 # get all areas from the simplified API
 ipc_get_points()
 
 # get areas for specific analysis ID and period from advanced API
 ipc_get_points(id = 18978466, period = "P")
-\dontshow{\}) # examplesIf}
+}
 }

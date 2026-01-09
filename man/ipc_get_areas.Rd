@@ -81,7 +81,7 @@ because the duplicates are there due to polygon geometries.
 }
 
 \examples{
-\dontshow{if (!is.na(Sys.getenv("IPC_API_KEY", unset = NA))) withAutoprint(\{ # examplesIf}
+\dontrun{
 # get all areas from the simplified API
 ipc_get_areas()
 
@@ -90,5 +90,5 @@ ipc_get_areas(id = 12856213, period = "P")
 
 # request GeoJSON return
 ipc_get_areas(id = 12856213, period = "P", return_format = "geojson")
-\dontshow{\}) # examplesIf}
+}
 }

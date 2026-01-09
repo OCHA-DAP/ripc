@@ -65,12 +65,12 @@ When \code{tidy_df} is \code{TRUE}, \code{aar_id} is renamed to \code{area_id} a
 }
 
 \examples{
-\dontshow{if (!is.na(Sys.getenv("IPC_API_KEY", unset = NA))) withAutoprint(\{ # examplesIf}
+\dontrun{
 
 # get all icons from the simplified API
 ipc_get_icons()
 
 # get icons for specific analysis ID and period from advanced API
 ipc_get_icons(id = 12135625, period = "C")
-\dontshow{\}) # examplesIf}
+}
 }

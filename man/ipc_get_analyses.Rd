@@ -62,11 +62,11 @@ output to ensure each row represents a single analysis:
 }
 
 \examples{
-\dontshow{if (!is.na(Sys.getenv("IPC_API_KEY", unset = NA))) withAutoprint(\{ # examplesIf}
+\dontrun{
 # get all analyses details from the simplified API
 ipc_get_analyses()
 
 # get analysis details for a specific analysis ID
 ipc_get_analyses(id = 12856213)
-\dontshow{\}) # examplesIf}
+}
 }

@@ -67,11 +67,11 @@ start and end periods to be the 15th of the month.
 }
 
 \examples{
-\dontshow{if (!is.na(Sys.getenv("IPC_API_KEY", unset = NA))) withAutoprint(\{ # examplesIf}
+\dontrun{
 # get all areas from the simplified API
 ipc_get_country()
 
 # get country data just for Somalia
 ipc_get_country(country = "SO")
-\dontshow{\}) # examplesIf}
+}
 }
