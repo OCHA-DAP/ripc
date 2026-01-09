@@ -98,12 +98,12 @@ single data frame.
 }
 
 \examples{
-\dontrun{
+\dontshow{if (!is.na(Sys.getenv("IPC_API_KEY", unset = NA))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # get all populations from the simplified API
 ipc_get_population()
 
 # get populations for specific analysis ID from advanced API
 ipc_get_population(id = 12856213) # analysis with areas data frame
 ipc_get_population(id = 65508276) # analysis with groups data frame
-}
+\dontshow{\}) # examplesIf}
 }
