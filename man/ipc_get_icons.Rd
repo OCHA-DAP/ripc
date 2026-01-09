@@ -65,7 +65,7 @@ When \code{tidy_df} is \code{TRUE}, \code{aar_id} is renamed to \code{area_id} a
 }
 
 \examples{
-\dontshow{if (!is.na(Sys.getenv("IPC_API_KEY", unset = NA))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (!is.na(Sys.getenv("IPC_API_KEY", unset = NA))) withAutoprint(\{ # examplesIf}
 
 # get all icons from the simplified API
 ipc_get_icons()
