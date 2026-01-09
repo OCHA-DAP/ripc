@@ -1,7 +1,3 @@
-# ripc 0.3.2
-
-* Modified expected_format in `ipc_get()` according to change in the IPC api
-
 # ripc 0.3.1
 
 * Fixed `type_convert_silent()` to parse `NA` strings as characters, not explicit
