@@ -1,3 +1,7 @@
+# ripc 1.0.0
+
+* In `ipc_get_population()` duplicates are removed
+
 # ripc 0.3.1
 
 * Fixed `type_convert_silent()` to parse `NA` strings as characters, not explicit
