@@ -13,6 +13,9 @@ pivot_population_df <- function(df) {
     names_to = c("name", "period")
   )
 
+  df_long <- df_long |>
+    dplyr::distinct(.keep_all = TRUE)
+
   df_wide <- tidyr::pivot_wider(
     df_long,
     names_from = "name",

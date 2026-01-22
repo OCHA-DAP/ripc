@@ -1,6 +1,6 @@
 Package: ripc
 Title: Download and Tidy IPC and CH Data
-Version: 0.3.2
+Version: 1.0.0
 Authors@R: 
     person(
       given = "Giulia",
@@ -36,5 +36,7 @@ Imports:
     tidyr
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    spelling
 VignetteBuilder: knitr
+Language: en-US
